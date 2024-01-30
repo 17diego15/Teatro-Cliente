@@ -1,0 +1,56 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+:root {
+    --header_footer: #13202C;
+    --fondo: #0D263D;
+    --blanco: #fff;
+    --botonActivo: #226AAC;
+    --boton: #0D263D;
+    --botonTransparente: rgba(13, 38, 61, 0.7);
+}
+
+/* Cabecera */
+
+.header {
+    display: flex;
+    background-color: var(--header_footer);
+    height: 5rem;
+}
+
+.header_izq {
+    width: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--blanco);
+}
+
+.header_izq img {
+    width: 4rem;
+    height: 4rem;
+}
+
+.header_dcha {
+    width: 70%;
+    display: flex;
+    align-items: center;
+}
+
+.header_dcha nav{
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+}
+
+.header_dcha nav a{
+    color: var(--blanco);
+    text-decoration: none;
+}
+
+.header_dcha nav a:hover {
+    text-decoration: underline;
+    color: var(--botonActivo);
+}
