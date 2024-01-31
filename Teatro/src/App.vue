@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import Cabecera from './components/Cabecera.vue'
+import Pie from './components/PiePagina.vue'
+
 </script>
 
 <template>
@@ -13,4 +15,5 @@ import Cabecera from './components/Cabecera.vue'
   </header>
 
   <RouterView /> 
+  <Pie />
 </template>
