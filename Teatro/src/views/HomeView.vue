@@ -1,84 +1,66 @@
 <script lang="ts">
-import { defineComponent, ref, onMounted, onBeforeUnmount, computed, nextTick } from 'vue';
-import slider1 from '../asserts/slider1.jpg';
-import slider2 from '../asserts/slider2.jpg';
+import { defineComponent, onMounted, ref } from 'vue';
 
 export default defineComponent({
-    name: 'HomeSlider',
+    name: 'SliderComponent',
     setup() {
-        const originalSlides = [
-            { image: slider1, altText: 'Imagen 1' },
-            { image: slider2, altText: 'Imagen 2' },
-        ];
-        const slides = ref([...originalSlides, ...originalSlides]); // Duplicamos las diapositivas
-        const currentIndex = ref(0);
-        const isTransitioning = ref(false);
+        const slider = ref<HTMLElement | null>(null);
+        let isTransitioning = false;
 
-        const sliderStyle = computed(() => ({
-            transform: `translateX(-${100 * currentIndex.value}%)`,
-            transition: isTransitioning.value ? 'transform 0.5s ease-in-out' : 'none',
-        }));
-
-        function nextSlide() {
-            if (!isTransitioning.value && slides.value.length > 1) {
-                isTransitioning.value = true;
-
-                currentIndex.value++;
+        const nextSlide = () => {
+            if (!isTransitioning && slider.value) {
+                isTransitioning = true;
+                slider.value.style.transition = 'transform 0.5s ease-in-out';
+                slider.value.style.transform = 'translateX(-100%)';
 
                 setTimeout(() => {
-                    if (currentIndex.value >= originalSlides.length) {
-                        currentIndex.value = 0;
-                        nextTick(() => {
-                            isTransitioning.value = false;
-                        });
-                    } else {
-                        isTransitioning.value = false;
+                    if (slider.value) {
+                        const firstSlide = slider.value.firstElementChild as HTMLElement;
+                        slider.value.appendChild(firstSlide);
+                        slider.value.style.transition = 'none';
+                        slider.value.style.transform = 'translateX(0)';
+                        isTransitioning = false;
                     }
                 }, 500);
             }
-        }
+        };
 
-        function prevSlide() {
-            if (!isTransitioning.value && slides.value.length > 1) {
-                isTransitioning.value = true;
-
-                currentIndex.value = currentIndex.value > 0 ? currentIndex.value - 1 : slides.value.length - 1;
+        const prevSlide = () => {
+            if (!isTransitioning && slider.value) {
+                isTransitioning = true;
+                slider.value.style.transition = 'none';
+                const lastSlide = slider.value.lastElementChild as HTMLElement;
+                slider.value.insertBefore(lastSlide, slider.value.firstElementChild);
+                slider.value.style.transform = 'translateX(-100%)';
 
                 setTimeout(() => {
-                    if (currentIndex.value === 0) {
-                        currentIndex.value = originalSlides.length;
-                        nextTick(() => {
-                            isTransitioning.value = false;
-                        });
-                    } else {
-                        isTransitioning.value = false;
+                    if (slider.value) {
+                        slider.value.style.transition = 'transform 0.5s ease-in-out';
+                        slider.value.style.transform = 'translateX(0)';
+                        isTransitioning = false;
                     }
-                }, 500);
+                }, 0);
             }
-        }
+        };
 
-        let intervalId: number;
         onMounted(() => {
-            intervalId = setInterval(nextSlide, 3000);
+            setInterval(nextSlide, 5000);
         });
 
-        onBeforeUnmount(() => {
-            clearInterval(intervalId);
-        });
-
-        return { slides, sliderStyle, nextSlide, prevSlide };
-    }
+        return { prevSlide, nextSlide, slider };
+    },
 });
 </script>
-
-
 
 <template>
     <section class="home_container">
         <div class="home_slider-container">
-            <div class="home_slider" :style="sliderStyle">
-                <div class="home_slide" v-for="(slide, index) in slides" :key="index">
-                    <img :src="slide.image" :alt="slide.altText">
+            <div class="home_slider" ref="slider">
+                <div class="home_slide">
+                    <img src="../asserts/slider1.jpg" alt="Image 1">
+                </div>
+                <div class="home_slide">
+                    <img src="../asserts/slider2.jpg" alt="Image 2">
                 </div>
             </div>
             <svg class="home_prev-button" @click="prevSlide" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
@@ -95,7 +77,6 @@ export default defineComponent({
                 <button class="home_cartelera_boton1" id="botonCartelera">Ver toda la cartelera</button>
             </div>
             <div class="home_cartelera_div" id="obrasContainer">
-                <!-- Contenido de la cartelera aquí -->
             </div>
         </div>
     </section>
