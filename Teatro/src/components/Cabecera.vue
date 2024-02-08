@@ -13,7 +13,7 @@ import { RouterLink } from 'vue-router'
         <div class="header_dcha">
             <nav>
                 <RouterLink to="/">Home</RouterLink>
-                <RouterLink to="/about">Cartelera</RouterLink>
+                <RouterLink to="/cartelera">Cartelera</RouterLink>
             </nav>
         </div>
     </div>

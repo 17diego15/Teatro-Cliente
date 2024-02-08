@@ -1,6 +1,7 @@
 * {
     padding: 0;
     margin: 0;
+    box-sizing: border-box;
 }
 
 :root {
@@ -218,6 +219,10 @@
     width: 13rem;
     height: 2.5rem;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
 }
 
 .home_cartelera_boton1:hover {
@@ -227,7 +232,6 @@
 
 .home_cartelera_div {
     display: flex;
-    flex-direction: column;
     justify-content: center;
     gap: 1rem;
     width: 100%;

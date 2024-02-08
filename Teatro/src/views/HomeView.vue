@@ -1,10 +1,16 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue';
+import { RouterLink } from 'vue-router'
+
+import imagen1 from '../asserts/slider1.jpg';
+import imagen2 from '../asserts/slider2.jpg';
+
 
 export default defineComponent({
     name: 'SliderComponent',
     setup() {
         const slider = ref<HTMLElement | null>(null);
+        const obrasAleatorias = ref<Array<{ id: number; imagen: string }>>([]);
         let isTransitioning = false;
 
         const nextSlide = () => {
@@ -43,11 +49,22 @@ export default defineComponent({
             }
         };
 
+        obrasAleatorias.value = [
+            { id: 1, imagen: imagen1 },
+            { id: 2, imagen: imagen2 },
+            { id: 3, imagen: imagen2 },
+        ];
+
+        //cambiar cuando tenga las rutas bien
+        const irAInfoObra = (id: number) => {
+            window.location.href = `../Paginas/InfoObra.html?id=${id}`;
+        };
+
         onMounted(() => {
             setInterval(nextSlide, 5000);
         });
 
-        return { prevSlide, nextSlide, slider };
+        return { prevSlide, nextSlide, slider, obrasAleatorias, irAInfoObra };
     },
 });
 </script>
@@ -74,9 +91,13 @@ export default defineComponent({
         </div>
         <div class="home_cartelera">
             <div class="home_cartelera_div_boton">
-                <button class="home_cartelera_boton1" id="botonCartelera">Ver toda la cartelera</button>
+                <RouterLink to="/cartelera" class="home_cartelera_boton1" id="botonCartelera">Ver toda la cartelera</RouterLink>
             </div>
             <div class="home_cartelera_div" id="obrasContainer">
+                <div v-for="obra in obrasAleatorias" :key="obra.id" class="home_cartelera_div_img">
+                    <img :src="obra.imagen" alt="Imagen de obra">
+                    <button class="home_cartelera_boton1" @click="irAInfoObra(obra.id)">Comprar</button>
+                </div>
             </div>
         </div>
     </section>
