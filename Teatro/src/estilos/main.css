@@ -254,3 +254,58 @@
     left: 1.5rem;
     background-color: var(--botonTransparente);
 }
+
+/*cartelera*/
+
+.cartelera_section {
+    min-height: 100vh;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 2rem;
+    gap: 1rem; /* Esto establece el espacio entre los elementos */
+    justify-content: flex-start;
+    background-color: var(--fondo);
+  }
+
+.cartelera_boton1 {
+  background-color: var(--boton);
+  color: var(--blanco);
+  border-color: var(--blanco);
+  border-width: 1px;
+  border-style: solid;
+  width: 13rem;
+  height: 2.5rem;
+  cursor: pointer;
+}
+.cartelera_boton1:hover {
+  background-color: var(--botonActivo);
+  border: 0;
+}
+
+.cartelera_div {
+    width: 100%; 
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem; 
+  }
+
+  .cartelera_div_img {
+    width: calc(25% - 1rem); 
+    margin-bottom: 1rem; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+.cartelera_div_img img {
+  width: 16rem;
+  height: 25rem;
+}
+
+.cartelera_div_img button {
+  position: relative;
+  bottom: 5rem;
+  background-color: var(--botonTransparente);
+}
+
