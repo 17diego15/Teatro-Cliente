@@ -1,25 +1,25 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 
-import imagen1 from '../asserts/slider1.jpg';
-import imagen2 from '../asserts/slider2.jpg';
+import obra1 from '../asserts/impulso.jpg'
+import obra2 from '../asserts/caminoAlZoo.jpg'
 
 export default defineComponent({
   name: 'ObrasComponent',
   setup() {
     const obras = ref([
-      { id: 1, imagen: imagen1, nombre: 'Obra 1' },
-      { id: 2, imagen: imagen2, nombre: 'Obra 2' },
-      { id: 2, imagen: imagen2, nombre: 'Obra 2' },
-      { id: 2, imagen: imagen2, nombre: 'Obra 2' },
-      { id: 2, imagen: imagen2, nombre: 'Obra 2' },
-      { id: 2, imagen: imagen2, nombre: 'Obra 2' },
-      { id: 2, imagen: imagen2, nombre: 'Obra 2' },
+      { id: 1, imagen: obra1, nombre: 'Obra 1' },
+      { id: 2, imagen: obra2, nombre: 'Obra 2' },
+      { id: 3, imagen: obra2, nombre: 'Obra 2' },
+      { id: 4, imagen: obra2, nombre: 'Obra 2' },
+      { id: 5, imagen: obra2, nombre: 'Obra 2' },
+      { id: 6, imagen: obra2, nombre: 'Obra 2' },
+      { id: 7, imagen: obra2, nombre: 'Obra 2' },
 
     ]);
 
     const comprarObra = (id: number) => {
-      window.location.href = `../Paginas/InfoObra.html?id=${id}`;
+      window.location.href = `/obra/${id}`;
     };
 
     return { obras, comprarObra };

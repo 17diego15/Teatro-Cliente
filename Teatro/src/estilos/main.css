@@ -11,6 +11,7 @@
     --botonActivo: #226AAC;
     --boton: #0D263D;
     --botonTransparente: rgba(13, 38, 61, 0.7);
+    --titulo:#3198F7;
 }
 
 /* Cabecera */
@@ -309,3 +310,79 @@
   background-color: var(--botonTransparente);
 }
 
+/*detalle obras*/
+
+.infoPelicula_sectionContainer {
+    min-height: 100vh;
+    justify-content: center;
+    display: flex;
+    background-color: var(--fondo);
+    color: var(--blanco);
+    flex-direction: column;
+  }
+  
+  .infoPelicula_section_div {
+    display: flex;
+    padding: 2rem 0rem 2rem 0rem;
+    align-items: center;
+  }
+  
+  .infoPelicula_section_izq {
+    width: 33.3%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .infoPelicula_section_izq img {
+    width: 16rem;
+    height: 25rem;
+  }
+  
+  .infoPelicula_section_central {
+    width: 33.3%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+  }
+  .infoPelicula_section_central h2 {
+    color: var(--titulo);
+    font-size: 40px;
+  }
+  
+  .infoPelicula_section_dcha {
+    width: 33.3%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+  }
+  
+  .infoPelicula_section_dcha_div1, .infoPelicula_section_dcha_div2 {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .infoPelicula_section_boton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 0rem 2rem 0rem;
+  }
+  .infoPelicula_section_boton button {
+    background-color: var(--botonTransparente);
+    color: var(--blanco);
+    border-color: var(--blanco);
+    border-width: 1px;
+    border-style: solid;
+    width: 13rem;
+    height: 2.5rem;
+    cursor: pointer;
+  }
+  .infoPelicula_section_boton button:hover {
+    background-color: var(--botonActivo);
+    border: 0;
+  }
+  

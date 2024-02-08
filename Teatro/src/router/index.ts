@@ -13,6 +13,11 @@ const router = createRouter({
       path: '/cartelera',
       name: 'cartelera',
       component: () => import('../views/CarteleraView.vue')
+    },
+    {
+      path: '/obra/:id',
+      name: 'obra',
+      component: () => import('../views/DetalleObraView.vue')
     }
   ]
 })
