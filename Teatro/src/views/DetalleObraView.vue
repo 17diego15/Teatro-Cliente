@@ -89,32 +89,36 @@ export default defineComponent({
 </script>
 
 <template>
-    <div class="infoPelicula_sectionContainer" v-if="obra">
-        <div class="infoPelicula_section_div">
-
-            <div class="infoPelicula_section_izq">
-                <img :src="obra.imagen" :alt="'Imagen de ' + obra.titulo" class="infoPelicula_section_izq_img">
+    <div class="infoObras_sectionContainer" v-if="obra">
+        <div class="infoObras_section_div">
+            <div class="infoObras_section_izq">
+                <img :src="obra.imagen" :alt="'Imagen de ' + obra.titulo" class="infoObras_section_izq_img">
             </div>
 
-            <div class="infoPelicula_section_central">
+            <div class="infoObras_section_central">
                 <h2>{{ obra.titulo }}</h2>
-                <p><strong>Director:</strong> {{ obra.director }}</p>
-                <p><strong>Actores:</strong> {{ obra.actores.join(', ') }}</p>
-                <p><strong>Sinopsis:</strong> {{ obra.sipnosis }}</p>
+                <p><strong>Director:</strong></p>
+                <p>{{ obra.director }}</p>
+                <p><strong>Actores:</strong></p>
+                <p>{{ obra.actores.join(', ') }}</p>
+                <p><strong>Sinopsis:</strong> </p>
+                <p>{{ obra.sipnosis }}</p>
             </div>
 
-            <div class="infoPelicula_section_dcha">
-                <div class="infoPelicula_section_dcha_div1">
-                    <p><strong>Duración:</strong> {{ obra.duracion }}</p>
+            <div class="infoObras_section_dcha">
+                <div class="infoObras_section_dcha_div1">
+                    <p><strong>Duración:</strong></p>
+                    <p>{{ obra.duracion }}</p>
                 </div>
-                <div class="infoPelicula_section_dcha_div2">
-                    <p><strong>Precio:</strong> {{ obra.precio }}€</p>
+                <div class="infoObras_section_dcha_div2">
+                    <p><strong>Precio:</strong></p>
+                    <p>{{ obra.precio }}€</p>
                 </div>
             </div>
 
         </div>
 
-        <div class="infoPelicula_section_boton">
+        <div class="infoObras_section_boton">
             <button @click="comprarObra(obra.id)">Comprar</button>
         </div>
 

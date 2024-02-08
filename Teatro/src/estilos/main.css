@@ -312,7 +312,7 @@
 
 /*detalle obras*/
 
-.infoPelicula_sectionContainer {
+.infoObras_sectionContainer {
     min-height: 100vh;
     justify-content: center;
     display: flex;
@@ -321,36 +321,36 @@
     flex-direction: column;
   }
   
-  .infoPelicula_section_div {
+  .infoObras_section_div {
     display: flex;
     padding: 2rem 0rem 2rem 0rem;
     align-items: center;
   }
   
-  .infoPelicula_section_izq {
+  .infoObras_section_izq {
     width: 33.3%;
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  .infoPelicula_section_izq img {
+  .infoObras_section_izq img {
     width: 16rem;
     height: 25rem;
   }
   
-  .infoPelicula_section_central {
+  .infoObras_section_central {
     width: 33.3%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 1rem;
   }
-  .infoPelicula_section_central h2 {
+  .infoObras_section_central h2 {
     color: var(--titulo);
     font-size: 40px;
   }
   
-  .infoPelicula_section_dcha {
+  .infoObras_section_dcha {
     width: 33.3%;
     display: flex;
     flex-direction: column;
@@ -359,19 +359,21 @@
     gap: 3rem;
   }
   
-  .infoPelicula_section_dcha_div1, .infoPelicula_section_dcha_div2 {
+  .infoObras_section_dcha_div1, .infoObras_section_dcha_div2 {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    width: 100%;
+    align-items: center;
   }
   
-  .infoPelicula_section_boton {
+  .infoObras_section_boton {
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 2rem 0rem 2rem 0rem;
   }
-  .infoPelicula_section_boton button {
+  .infoObras_section_boton button {
     background-color: var(--botonTransparente);
     color: var(--blanco);
     border-color: var(--blanco);
@@ -381,7 +383,7 @@
     height: 2.5rem;
     cursor: pointer;
   }
-  .infoPelicula_section_boton button:hover {
+  .infoObras_section_boton button:hover {
     background-color: var(--botonActivo);
     border: 0;
   }
