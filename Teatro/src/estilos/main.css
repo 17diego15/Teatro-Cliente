@@ -397,4 +397,34 @@
     background-color: var(--botonActivo);
     border: 0;
   }
-  
+
+  /* 404 */
+  .notFound_sectionContainer {
+    min-height: 100vh;
+    justify-content: center;
+    display: flex;
+    background-color: var(--fondo);
+    color: var(--blanco);
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .notFound_sectionContainer p{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    font-size: 1.5rem;
+
+  }
+
+  .notFound_sectionContainer h1{
+    display: flex;
+    justify-content: center;
+    font-size: 5rem;
+  }
+
+  .notFound_img{
+    width: 12rem;
+    height: 12rem;
+  }

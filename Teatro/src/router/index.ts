@@ -18,6 +18,15 @@ const router = createRouter({
       path: '/obra/:id',
       name: 'obra',
       component: () => import('../views/DetalleObraView.vue')
+    },
+    {
+      path: '/notFound',
+      name: '404',
+      component: () => import('../views/404View.vue')
+    },
+    {
+      path: '/:catchAll(.*)', 
+      redirect: '/notFound' 
     }
   ]
 })

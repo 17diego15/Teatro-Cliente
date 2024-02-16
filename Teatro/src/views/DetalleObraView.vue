@@ -77,6 +77,9 @@ export default defineComponent({
                 },
             ];
             obra.value = obras.find((o) => o.id === Number(obraId)) || null;
+            if (!obra.value) {
+                router.push('/notFound');
+            }
         });
 
         const comprarObra = (id: number) => {
