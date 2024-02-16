@@ -123,11 +123,21 @@
     color: var(--blanco);
 }
 
-.home_footer_dcha_div_texto {
+.home_footer_dcha_div_texto nav{
     display: flex;
     flex-direction: column;
     gap: 1rem;
     align-items: center;
+}
+
+.home_footer_dcha_div_texto nav a{
+    text-decoration: none;
+    color: var(--blanco);
+}
+
+.home_footer_dcha_div_texto nav a:hover{
+    text-decoration: underline;
+    color: var(--botonActivo);
 }
 
 

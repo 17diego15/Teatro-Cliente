@@ -1,3 +1,8 @@
+<script setup lang="ts">
+import { RouterLink } from 'vue-router'
+
+</script>
+
 
 <template>
     <div class="home_footer">
@@ -28,22 +33,28 @@
                 <div class="home_footer_dcha_div2">
                     <h2>Nosotros</h2>
                     <div class="home_footer_dcha_div_texto">
-                        <p>¿Quienes somos?</p>
-                        <p>Conocenos</p>
+                        <nav>
+                            <RouterLink to="/quienesSomos">¿Quienes somos?</RouterLink>
+                            <RouterLink to="/conocenos">Conocenos</RouterLink>
+                        </nav>
                     </div>
                 </div>
                 <div class="home_footer_dcha_div2">
                     <h2>Visita</h2>
                     <div class="home_footer_dcha_div_texto">
-                        <p>Cartelera</p>
-                        <p>Eventos</p>
+                        <nav>
+                            <RouterLink to="/cartelera">Cartelera</RouterLink>
+                            <RouterLink to="/eventos">Eventos</RouterLink>
+                        </nav>
                     </div>
                 </div>
                 <div class="home_footer_dcha_div2">
                     <h2>Acerca de Ticketon</h2>
                     <div class="home_footer_dcha_div_texto">
-                        <p>Politica de privacidad</p>
-                        <p>Cookies</p>
+                        <nav>
+                            <RouterLink to="/politicaDePrivacidad">Politica de privacidad</RouterLink>
+                            <RouterLink to="/cookies">Cookies</RouterLink>
+                        </nav>
                     </div>
                 </div>
             </div>
