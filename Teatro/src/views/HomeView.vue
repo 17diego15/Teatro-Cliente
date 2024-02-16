@@ -4,6 +4,7 @@ import { RouterLink } from 'vue-router'
 
 import imagen1 from '../asserts/slider1.jpg';
 import imagen2 from '../asserts/slider2.jpg';
+import router from '@/router';
 
 
 export default defineComponent({
@@ -57,7 +58,7 @@ export default defineComponent({
 
         //cambiar cuando tenga las rutas bien
         const irAInfoObra = (id: number) => {
-            window.location.href = `../Paginas/InfoObra.html?id=${id}`;
+            router.push(`/obra/${id}`);
         };
 
         onMounted(() => {
