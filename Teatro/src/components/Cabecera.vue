@@ -13,7 +13,7 @@ export default defineComponent({
 <template>
     <div class="header">
         <div class="header_izq">
-            <img src="../asserts/logo.png" alt="">
+            <img src="../assets/logo.png" alt="">
         </div>
         <div class="header_dcha">
             <nav>

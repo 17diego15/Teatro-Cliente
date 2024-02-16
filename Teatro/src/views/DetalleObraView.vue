@@ -2,8 +2,8 @@
 import { defineComponent, ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import obra1 from '../asserts/impulso.jpg'
-import obra2 from '../asserts/caminoAlZoo.jpg'
+import obra1 from '../assets/impulso.jpg'
+import obra2 from '../assets/caminoAlZoo.jpg'
 
 type Obra = {
     id: number;

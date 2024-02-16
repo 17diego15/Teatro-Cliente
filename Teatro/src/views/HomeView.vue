@@ -2,8 +2,8 @@
 import { defineComponent, onMounted, ref } from 'vue';
 import { RouterLink } from 'vue-router'
 
-import imagen1 from '../asserts/slider1.jpg';
-import imagen2 from '../asserts/slider2.jpg';
+import imagen1 from '../assets/slider1.jpg';
+import imagen2 from '../assets/slider2.jpg';
 import router from '@/router';
 
 
@@ -75,10 +75,10 @@ export default defineComponent({
         <div class="home_slider-container">
             <div class="home_slider" ref="slider">
                 <div class="home_slide">
-                    <img src="../asserts/slider1.jpg" alt="Image 1">
+                    <img src="../assets/slider1.jpg" alt="Image 1">
                 </div>
                 <div class="home_slide">
-                    <img src="../asserts/slider2.jpg" alt="Image 2">
+                    <img src="../assets/slider2.jpg" alt="Image 2">
                 </div>
             </div>
             <svg class="home_prev-button" @click="prevSlide" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">

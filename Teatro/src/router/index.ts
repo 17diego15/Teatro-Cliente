@@ -20,6 +20,11 @@ const router = createRouter({
       component: () => import('../views/DetalleObraView.vue')
     },
     {
+      path: '/compra/:id',
+      name: 'compra',
+      component: () => import('../views/EleccionSalaView.vue')
+    },
+    {
       path: '/notFound',
       name: '404',
       component: () => import('../views/404View.vue')

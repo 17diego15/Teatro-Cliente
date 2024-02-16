@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import icono from '../asserts/icono.png'
+import icono from '../assets/icono.png'
 
 </script>
 

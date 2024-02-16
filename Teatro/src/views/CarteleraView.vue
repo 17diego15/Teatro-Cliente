@@ -1,8 +1,8 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 
-import obra1 from '../asserts/impulso.jpg'
-import obra2 from '../asserts/caminoAlZoo.jpg'
+import obra1 from '../assets/impulso.jpg'
+import obra2 from '../assets/caminoAlZoo.jpg'
 
 export default defineComponent({
   name: 'ObrasComponent',
