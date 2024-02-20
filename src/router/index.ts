@@ -25,6 +25,11 @@ const router = createRouter({
       component: () => import('../views/EleccionSalaView.vue')
     },
     {
+      path: '/admin',
+      name: 'admin',
+      component: () => import('../views/DashboardView.vue')
+    },
+    {
       path: '/notFound',
       name: '404',
       component: () => import('../views/404View.vue')

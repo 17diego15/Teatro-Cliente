@@ -271,7 +271,8 @@
   display: flex;
   flex-wrap: wrap;
   padding: 2rem;
-  gap: 1rem; /* Esto establece el espacio entre los elementos */
+  gap: 1rem;
+  /* Esto establece el espacio entre los elementos */
   justify-content: flex-start;
   background-color: var(--fondo);
 }
@@ -286,6 +287,7 @@
   height: 2.5rem;
   cursor: pointer;
 }
+
 .cartelera_boton1:hover {
   background-color: var(--botonActivo);
   border: 0;
@@ -341,6 +343,7 @@
   align-items: center;
   justify-content: center;
 }
+
 .infoObras_section_izq img {
   width: 16rem;
   height: 25rem;
@@ -353,6 +356,7 @@
   justify-content: center;
   gap: 1rem;
 }
+
 .infoObras_section_central h2 {
   color: var(--titulo);
   font-size: 40px;
@@ -382,6 +386,7 @@
   align-items: center;
   padding: 2rem 0rem 2rem 0rem;
 }
+
 .infoObras_section_boton button {
   background-color: var(--botonTransparente);
   color: var(--blanco);
@@ -392,6 +397,7 @@
   height: 2.5rem;
   cursor: pointer;
 }
+
 .infoObras_section_boton button:hover {
   background-color: var(--botonActivo);
   border: 0;
@@ -440,6 +446,7 @@
   gap: 2rem;
   padding: 2rem;
 }
+
 .eleccionSala_container button {
   background-color: var(--boton);
   color: var(--blanco);
@@ -450,6 +457,7 @@
   height: 2.5rem;
   cursor: pointer;
 }
+
 .eleccionSala_container button:hover {
   background-color: var(--botonActivo);
   border: none;
@@ -469,6 +477,7 @@
   align-items: center;
   justify-content: center;
 }
+
 .eleccionSala_container_div_divizq img {
   width: 16rem;
   height: 25rem;
@@ -481,6 +490,7 @@
   gap: 2rem;
   justify-content: center;
 }
+
 .eleccionSala_container_div_divdcha h2 {
   color: var(--titulo);
 }
@@ -493,10 +503,25 @@
   gap: 2rem;
   align-items: center;
 }
+
 .eleccionSala_div2 div {
   display: flex;
   gap: 2rem;
   align-items: center;
   width: 50%;
   justify-content: space-around;
+}
+
+/*dashboard*/
+
+.dashboard_container {
+  min-height: 100vh;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--fondo);
+  color: var(--blanco);
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem;
 }
