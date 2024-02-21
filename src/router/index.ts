@@ -30,9 +30,9 @@ const router = createRouter({
       component: () => import('../views/DashboardView.vue')
     },
     {
-      path: '/crearCuenta',
-      name: 'crearCuenta',
-      component: () => import('../views/CrearCuentaView.vue')
+      path: '/register',
+      name: 'register',
+      component: () => import('../views/RegisterView.vue')
     },
     {
       path: '/notFound',
