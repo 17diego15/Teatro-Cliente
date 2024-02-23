@@ -14,15 +14,16 @@ interface Obra {
   precio: number;
   imagen: string;
 }
-const router = useRouter()
 
 export default defineComponent({
   name: 'ObrasComponent',
   setup() {
     const obras = ref<Obra[]>([]);
+    const router = useRouter()
 
     const comprarObra = (id: number) => {
-      router.push(`/obra/${id}`)
+      console.log(id)
+      router.push(`obra/${id}`)
     };
 
     const cargarObras = async () => {

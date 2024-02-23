@@ -25,7 +25,7 @@ export default defineComponent({
         const router = useRouter();
 
         const comprarObra = (id: number) => {
-            router.push(`/obra/${id}`)
+            router.push(`/compra/${id}`)
         };
 
         const cargarObra = async () => {
