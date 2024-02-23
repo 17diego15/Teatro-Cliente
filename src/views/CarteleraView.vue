@@ -1,5 +1,6 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
 import obra1 from '../assets/impulso.jpg'
 import obra2 from '../assets/caminoAlZoo.jpg'
@@ -13,6 +14,7 @@ interface Obra {
   precio: number;
   imagen: string;
 }
+const router = useRouter()
 
 export default defineComponent({
   name: 'ObrasComponent',
@@ -20,8 +22,7 @@ export default defineComponent({
     const obras = ref<Obra[]>([]);
 
     const comprarObra = (id: number) => {
-      //cambiar metodo
-      window.location.href = `/obra/${id}`;
+      router.push(`/obra/${id}`)
     };
 
     const cargarObras = async () => {

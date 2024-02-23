@@ -1,6 +1,10 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router'
+
+interface Actor {
+    nombre: string;
+}
 
 interface Obra {
     obraID: number;
@@ -10,6 +14,7 @@ interface Obra {
     duración: string;
     precio: number;
     imagen: string;
+    actores: Actor[];
 }
 
 export default defineComponent({
@@ -19,21 +24,26 @@ export default defineComponent({
         const route = useRoute();
         const router = useRouter();
 
-        //boton
         const comprarObra = (id: number) => {
-            //cambiar ruta
-            window.location.href = `/obra/${id}`;
+            router.push(`/obra/${id}`)
         };
 
         const cargarObra = async () => {
             const id = Number(route.params.id);
             try {
                 const respuesta = await fetch(`/api/obras/${id}`)
+                console.log(respuesta)
+
                 if (!respuesta.ok) {
                     throw new Error(`Error al obtener la obra: ${id}`)
                 }
                 const data: Obra = await respuesta.json();
                 obra.value = data;
+                obra.value = {
+                    ...data,
+                    actores: data.actores.map((actor: any) => actor.nombre) 
+                };
+
             } catch (error) {
                 console.error(error)
             }
@@ -41,6 +51,7 @@ export default defineComponent({
         onMounted(() => {
             cargarObra();
         });
+        console.log(obra)
         return { obra, comprarObra };
     }
 });
@@ -58,7 +69,7 @@ export default defineComponent({
                 <p><strong>Director:</strong></p>
                 <p>{{ obra.director }}</p>
                 <p><strong>Actores:</strong></p>
-                <!-- <p>{{ obra.actores.join(', ') }}</p> -->
+                <p>{{ obra.actores.join(', ') }}</p>
                 <p><strong>Sinopsis:</strong> </p>
                 <p>{{ obra.sinopsis }}</p>
             </div>

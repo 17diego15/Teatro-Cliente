@@ -5,7 +5,7 @@ import obra1 from '../assets/impulso.jpg'
 import obra2 from '../assets/caminoAlZoo.jpg'
 
 type Obra = {
-  // ... tus tipos
+  
 }
 
 export default defineComponent({
@@ -80,7 +80,7 @@ export default defineComponent({
       obra.value = obras.find((o) => o.id === obraId) || null;
 
       if (!obra.value) {
-        router.push({ name: 'notFound' }) // Asegúrate de que el nombre de la ruta es correcto
+        router.push({ name: 'notFound' }) 
       }
     })
 
