@@ -1,40 +1,42 @@
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue'
-import { RouterLink } from 'vue-router'
+import { defineComponent, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
-    data() {
-        return {
-            usuarioID: 0,
-            nombre: '',
-            nombreUsuario: '',
-            contraseña: '',
-            isAdmin: false,
-        };
-    },
-    methods: {
-        async submitForm() {
+    setup() {
+        const NombreUsuario = ref('');
+        const Contraseña = ref('');
+        const router = useRouter();
+
+        const submitForm = async () => {
+            const queryParams = new URLSearchParams({
+                nombreUsuario: NombreUsuario.value,
+                contraseña: Contraseña.value
+            });
             try {
-                const response = await fetch('/api/usuario', {
+                const response = await fetch(`/api/Usuario/login?${queryParams}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        usuarioID: this.usuarioID,
-                        nombre: this.nombre,
-                        nombreUsuario: this.nombreUsuario,
-                        contraseña: this.contraseña,
-                        isAdmin: this.isAdmin,
-                    }),
+                    }
                 });
-                if (!response.ok) throw new Error('Error en la solicitud');
+                if (!response.ok) {
+                    const errorResponse = await response.json();
+                    throw new Error(`Error en la solicitud: ${errorResponse.detail}`);
+                }
                 const responseData = await response.json();
-                this.$router.push('/');
+                localStorage.setItem('nombreUsuario', responseData.nombreUsuario);
+                localStorage.setItem('token', responseData.token);
+                router.push('/');
             } catch (error) {
                 console.error('Error al enviar formulario:', error);
             }
-        },
+        };
+        return {
+            NombreUsuario,
+            Contraseña,
+            submitForm
+        };
     },
 });
 </script>
@@ -42,12 +44,11 @@ export default defineComponent({
 <template>
     <div class="register_container">
         <form @submit.prevent="submitForm" class="register_formulario">
-            <h2>Iniciar sesion</h2>
-            <input type="text" v-model="nombreUsuario" name="nombreUsuario" id="nombreUsuario"
-                placeholder="Nombre de usuario">
-            <input type="password" v-model="contraseña" name="contraseña" id="contraseña" placeholder="Contraseña">
+            <h2>Iniciar sesión</h2>
+            <input type="text" v-model="NombreUsuario" name="nombreUsuario" id="nombreUsuario" placeholder="Nombre de usuario">
+            <input type="password" v-model="Contraseña" name="contraseña" id="contraseña" placeholder="Contraseña">
             <button type="submit">Enviar</button>
-            <p>¿No tienes cuenta? <RouterLink to="/register">Registrate</RouterLink></p>
+            <p>¿No tienes cuenta? <RouterLink to="/register">Regístrate</RouterLink></p>
         </form>
     </div>
 </template>
