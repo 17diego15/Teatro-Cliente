@@ -539,3 +539,59 @@
   gap: 2rem;
   padding: 2rem;
 }
+
+.register_formulario{
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  height: 30rem;
+  justify-content: center;
+  align-items: center;
+  width: 40rem;
+}
+
+.register_formulario input{
+  width: 15rem;
+  height: 1.7rem;
+  display: flex;
+  background-color: var(--fondo);
+  border: none;
+  color: var(--blanco);
+  outline: none;
+  border-bottom: 2px solid var(--blanco);
+}
+
+.register_formulario input::placeholder{
+  color: var(--blanco);
+  opacity: 0.2;
+}
+
+.register_formulario button {
+  background-color: var(--boton);
+  color: var(--blanco);
+  border-color: var(--blanco);
+  border-width: 1px;
+  border-style: solid;
+  width: 13rem;
+  height: 2.5rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+}
+
+.register_formulario button:hover {
+  background-color: var(--botonActivo);
+  border: 0;
+}
+
+.register_formulario a{
+  color: var(--blanco);
+  text-decoration: none;
+}
+
+.register_formulario a:hover{
+  color: var(--botonActivo);
+  text-decoration: underline;
+}

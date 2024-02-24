@@ -41,13 +41,12 @@ export default defineComponent({
 <template>
     <div class="register_container">
         <form @submit.prevent="submitForm" class="register_formulario">
-            <h2>Registrate</h2>
-            <input type="text" v-model="nombre" name="nombre" id="nombre" placeholder="Nombre">
+            <h2>Iniciar sesion</h2>
             <input type="text" v-model="nombreUsuario" name="nombreUsuario" id="nombreUsuario"
                 placeholder="Nombre de usuario">
             <input type="password" v-model="contraseña" name="contraseña" id="contraseña" placeholder="Contraseña">
             <button type="submit">Enviar</button>
-            <p>¿Tienes una cuenta? <RouterLink to="/login">Inicia sesion</RouterLink></p>
+            <p>No tienes cuenta? <RouterLink to="/register">Inicia sesion</RouterLink></p>
         </form>
     </div>
 </template>
