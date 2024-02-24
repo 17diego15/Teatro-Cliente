@@ -30,6 +30,7 @@ export default defineComponent({
                 });
                 if (!response.ok) throw new Error('Error en la solicitud');
                 const responseData = await response.json();
+                this.$router.push('/');
             } catch (error) {
                 console.error('Error al enviar formulario:', error);
             }
@@ -46,7 +47,7 @@ export default defineComponent({
                 placeholder="Nombre de usuario">
             <input type="password" v-model="contraseña" name="contraseña" id="contraseña" placeholder="Contraseña">
             <button type="submit">Enviar</button>
-            <p>No tienes cuenta? <RouterLink to="/register">Inicia sesion</RouterLink></p>
+            <p>¿No tienes cuenta? <RouterLink to="/register">Registrate</RouterLink></p>
         </form>
     </div>
 </template>

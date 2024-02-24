@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue'
-import { RouterLink } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 export default defineComponent({
     data() {
@@ -14,6 +14,7 @@ export default defineComponent({
     },
     methods: {
         async submitForm() {
+            const router = useRouter(); // Obtén la instancia del router
             try {
                 const response = await fetch('/api/usuario', {
                     method: 'POST',
@@ -30,6 +31,7 @@ export default defineComponent({
                 });
                 if (!response.ok) throw new Error('Error en la solicitud');
                 const responseData = await response.json();
+                this.$router.push('/');
             } catch (error) {
                 console.error('Error al enviar formulario:', error);
             }
