@@ -595,3 +595,21 @@
   color: var(--botonActivo);
   text-decoration: underline;
 }
+
+/*sala*/
+
+.sala_container{
+  min-height: 100vh;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--fondo);
+  color: var(--blanco);
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.sala_container h2{
+  color: var(--titulo);
+}

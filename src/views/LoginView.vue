@@ -26,7 +26,6 @@ export default defineComponent({
                 }
                 const responseData = await response.json();
                 localStorage.setItem('nombreUsuario', responseData.nombreUsuario);
-                localStorage.setItem('token', responseData.token);
                 router.push('/');
             } catch (error) {
                 console.error('Error al enviar formulario:', error);
