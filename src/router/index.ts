@@ -40,7 +40,7 @@ const router = createRouter({
       component: () => import('../views/LoginView.vue')
     },
     {
-      path: '/sala',
+      path: '/sala/:id',
       name: 'sala',
       component: () => import('../views/SalaView.vue')
     },

@@ -48,8 +48,9 @@ export default defineComponent({
       router.push('/cartelera');
     };
 
-    const comprar = () => {
-      router.push('/sala');
+    const comprar = (id: number) => {
+      console.log(id)
+      router.push(`/sala/${id}`);
     };
 
     return { funciones, obra, volver, comprar };
@@ -71,7 +72,7 @@ export default defineComponent({
         <p>{{ funcion.fecha }}</p>
         <p>{{ funcion.hora }}</p>
         <p v-if="funcion.disponibilidad === 'Si'">Disponible</p>
-        <button v-if="funcion.disponibilidad === 'Si'" @click="comprar">Comprar</button>
+        <button v-if="funcion.disponibilidad === 'Si'" @click="comprar(funcion.funcionID)">Comprar</button>
         <p v-else>No disponible</p>
       </div>
     </div>
