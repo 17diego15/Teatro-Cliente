@@ -1,19 +1,28 @@
-<script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import Cabecera from './components/Cabecera.vue'
-import Pie from './components/PiePagina.vue'
+<script lang="ts">
+import { ref } from 'vue';
+import Cabecera from './components/Cabecera.vue';
 
+export default {
+  components: {
+    Cabecera
+  },
+  setup() {
+    const nombreUsuario = ref('');
+
+    return { nombreUsuario };
+  }
+};
 </script>
 
 <template>
   <header>
-    <Cabecera />
+    <Cabecera :nombre-usuario="nombreUsuario" @logout="nombreUsuario = ''" />
       <!-- <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
       </nav> -->
   </header>
 
-  <RouterView /> 
+  <router-view @usuario-logueado="nombreUsuario = $event" />
   <Pie />
 </template>

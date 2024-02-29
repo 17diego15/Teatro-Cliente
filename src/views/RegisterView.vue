@@ -14,7 +14,7 @@ export default defineComponent({
     },
     methods: {
         async submitForm() {
-            const router = useRouter(); // Obtén la instancia del router
+            const router = useRouter(); 
             try {
                 const response = await fetch('/api/usuario', {
                     method: 'POST',

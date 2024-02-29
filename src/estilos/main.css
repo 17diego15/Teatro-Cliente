@@ -45,6 +45,7 @@
   display: flex;
   justify-content: space-evenly;
   width: 100%;
+  align-items: center;
 }
 
 .header_dcha nav a {
@@ -57,6 +58,24 @@
   color: var(--botonActivo);
 }
 
+.header_boton{
+  background-color: var(--boton);
+  color: var(--blanco);
+  border-color: var(--blanco);
+  border-width: 1px;
+  border-style: solid;
+  width: 10rem;
+  height: 2rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+}
+.header_boton:hover{
+  background-color: var(--botonActivo);
+  border: 0;
+}
 /* Footer */
 
 .home_footer {
