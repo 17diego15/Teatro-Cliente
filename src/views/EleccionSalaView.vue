@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, onMounted, ref, toRefs  } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 interface Obra {
@@ -20,7 +20,11 @@ interface Funcion {
 
 export default defineComponent({
   name: 'DetalleObraView',
-  setup() {
+  props: {
+    nombreUsuario: String
+  },
+  setup(props) {
+
     const funciones = ref<Funcion[]>([]);
     const obra = ref<Obra | null>(null); 
     const route = useRoute();
@@ -49,8 +53,12 @@ export default defineComponent({
     };
 
     const comprar = (id: number) => {
-      console.log(id)
-      router.push(`/sala/${id}`);
+      //if (!props.nombreUsuario) {
+        //router.push({ name: 'login' });
+      //} else {
+        //console.log('Comprando como:', props.nombreUsuario);
+        router.push(`/sala/${id}`);
+      //}
     };
 
     return { funciones, obra, volver, comprar };
