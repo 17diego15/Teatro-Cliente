@@ -36,7 +36,7 @@ export default defineComponent({
         console.error(error);
       }
     };
-    
+
     onMounted(() => {
       cargarReservas();
     });
@@ -60,7 +60,12 @@ export default defineComponent({
 
     const actualizarAsientosReservados = () => {
       reservas.value.forEach((reserva) => {
-        const key = `row${reserva.numeroFila}col${reserva.numeroColumna}`;
+        let adjustedCol = reserva.numeroColumna;
+        //esto se suma porque en la bbdd es el 7 por ejemplo y se printa en el 8
+        if (reserva.numeroFila >= 4 && reserva.numeroColumna >= 7) {
+          adjustedCol += 1;
+        }
+        const key = `row${reserva.numeroFila}col${adjustedCol}`;
         if (seats[key]) {
           seats[key].color = reservedColor;
         }
@@ -80,11 +85,14 @@ export default defineComponent({
       const key = `row${row}col${col}`;
       if (seats[key]) {
         if (seats[key].color === reservedColor) {
-          // Mostrar mensaje de alerta si el asiento está reservado
           alert('Este asiento ya está ocupado.');
         } else {
-          // Cambiar el color si el asiento no está reservado
           seats[key].color = seats[key].color === defaultColor ? selectedColor : defaultColor;
+          let displayCol = col;
+          if (row >= 4 && col > 7) {
+            displayCol -= 1;
+          }
+          console.log(`Fila ${row}, Asiento ${displayCol}`);
         }
       }
     };
