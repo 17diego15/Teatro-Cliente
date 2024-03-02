@@ -1,6 +1,7 @@
 <script lang="ts">
 import { defineComponent, reactive, ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import type { Ref } from 'vue'; 
 
 interface Seat {
   row: number;
@@ -8,11 +9,19 @@ interface Seat {
   color: string;
 }
 
+interface Sala {
+  salaID: number;
+  nombre: string;
+  numeroFilas: number;
+  numeroColumnas: number;
+}
+
 interface Reserva {
   reservaID: number;
   funciónID: number;
   numeroFila: number;
   numeroColumna: number;
+  sala: Sala;
 }
 
 export default defineComponent({
@@ -21,16 +30,24 @@ export default defineComponent({
     const reservas = ref<Reserva[]>([]);
     const router = useRouter();
     const route = useRoute();
+    const numeroFilas = ref<number>(0);
+    const numeroColumnas = ref<number>(0);
+    const rows: Ref<number[]> = ref([]);
+    const cols: Ref<number[]> = ref([]);
+
 
     const cargarReservas = async () => {
       try {
         const id = Number(route.params.id);
-        const respuesta = await fetch(`/api/Reserva/funcion/${id}`);
+        const respuesta = await fetch(`/api/funcion/${id}/reservas`);
         if (!respuesta.ok) {
           throw new Error('Error al obtener las reservas');
         }
         const data: Reserva[] = await respuesta.json();
         reservas.value = data;
+        numeroFilas.value = data[0]?.sala?.numeroFilas || 0;
+        numeroColumnas.value = data[0]?.sala?.numeroColumnas || 0;
+        inicializarAsientos();
         actualizarAsientosReservados();
       } catch (error) {
         console.error(error);
@@ -40,28 +57,30 @@ export default defineComponent({
     onMounted(() => {
       cargarReservas();
     });
-
-    const rows = Array.from({ length: 12 }, (_, i) => i + 1);
-    const cols = Array.from({ length: 13 }, (_, i) => i + 1);
     const defaultColor = '#9dacbb';
     const selectedColor = '#00ff4c';
     const reservedColor = '#ff0000';
 
     const seats = reactive<Record<string, Seat>>({});
 
-    rows.forEach(row => {
-      cols.forEach(col => {
-        if (!(row >= 4 && col === 7)) {
-          const key = `row${row}col${col}`;
-          seats[key] = { row, col, color: defaultColor };
-        }
+    const inicializarAsientos = () => {
+      rows.value = Array.from({ length: numeroFilas.value }, (_, i) => i + 1);
+      cols.value = Array.from({ length: numeroColumnas.value }, (_, i) => i + 1);
+
+      rows.value.forEach((row: number) => {
+        cols.value.forEach((col: number) => {
+          if (!(row >= 4 && col === 7)) { 
+            const key = `row${row}col${col}`;
+            seats[key] = { row, col, color: defaultColor };
+          }
+        });
       });
-    });
+    };
+
 
     const actualizarAsientosReservados = () => {
       reservas.value.forEach((reserva) => {
         let adjustedCol = reserva.numeroColumna;
-        //esto se suma porque en la bbdd es el 7 por ejemplo y se printa en el 8
         if (reserva.numeroFila >= 4 && reserva.numeroColumna >= 7) {
           adjustedCol += 1;
         }
@@ -73,7 +92,7 @@ export default defineComponent({
     };
 
     const getColsForRow = (row: number) => {
-      return row >= 4 ? cols.filter(col => col !== 7) : cols;
+      return row >= 4 ? cols.value.filter((col: number )=> col !== 7) : cols.value;
     };
 
     const getSeatColor = ({ row, col }: { row: number; col: number }): string => {
@@ -106,10 +125,11 @@ export default defineComponent({
   },
 });
 </script>
+
 <template>
   <div class="sala_container">
     <h2>Haz click en donde te quieres sentar</h2>
-    <svg width="30%" height="100%" viewBox="0 0 140 130" preserveAspectRatio="xMidYMid meet">
+    <svg width="30%" viewBox="0 0 140 130" class="sala_svg" preserveAspectRatio="xMidYMid meet">
       <g v-for="row in rows" :key="row">
         <rect v-for="col in getColsForRow(row)" :key="col" :x="col * 10 - 10" :y="row * 10 - 10" width="9" height="9"
           :fill="getSeatColor({ row, col })" @click="toggleSeatColor({ row, col })" />

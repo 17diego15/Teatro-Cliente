@@ -58,7 +58,7 @@
   color: var(--botonActivo);
 }
 
-.header_boton{
+.header_boton {
   background-color: var(--boton);
   color: var(--blanco);
   border-color: var(--blanco);
@@ -72,10 +72,12 @@
   align-items: center;
   text-decoration: none;
 }
-.header_boton:hover{
+
+.header_boton:hover {
   background-color: var(--botonActivo);
   border: 0;
 }
+
 /* Footer */
 
 .home_footer {
@@ -496,7 +498,7 @@
   height: 30rem;
 }
 
-.eleccionSala_texto{
+.eleccionSala_texto {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -556,7 +558,7 @@
 
 /*register*/
 
-.register_container{
+.register_container {
   min-height: 100vh;
   justify-content: center;
   display: flex;
@@ -568,7 +570,7 @@
   padding: 2rem;
 }
 
-.register_formulario{
+.register_formulario {
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -578,7 +580,7 @@
   width: 40rem;
 }
 
-.register_formulario input{
+.register_formulario input {
   width: 15rem;
   height: 1.7rem;
   display: flex;
@@ -589,7 +591,7 @@
   border-bottom: 2px solid var(--blanco);
 }
 
-.register_formulario input::placeholder{
+.register_formulario input::placeholder {
   color: var(--blanco);
   opacity: 0.2;
 }
@@ -614,19 +616,19 @@
   border: 0;
 }
 
-.register_formulario a{
+.register_formulario a {
   color: var(--blanco);
   text-decoration: none;
 }
 
-.register_formulario a:hover{
+.register_formulario a:hover {
   color: var(--botonActivo);
   text-decoration: underline;
 }
 
 /*sala*/
 
-.sala_container{
+.sala_container {
   min-height: 100vh;
   justify-content: center;
   display: flex;
@@ -638,6 +640,12 @@
   padding: 2rem;
 }
 
-.sala_container h2{
+.sala_container h2 {
   color: var(--titulo);
+}
+
+.sala_svg {
+  display: flex;
+  justify-content: center; /* Centra horizontalmente el contenido del SVG */
+  align-items: center; /* Centra verticalmente el contenido del SVG */
 }
