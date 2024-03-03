@@ -1,10 +1,12 @@
 <script lang="ts">
 import { ref } from 'vue';
 import Cabecera from './components/Cabecera.vue';
+import Pie from './components/PiePagina.vue';
 
 export default {
   components: {
-    Cabecera
+    Cabecera,
+    Pie
   },
   setup() {
     const nombreUsuario = ref('');
