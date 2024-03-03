@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent, reactive, ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import type { Ref } from 'vue'; 
+import type { Ref } from 'vue';
 
 interface Seat {
   row: number;
@@ -28,10 +28,12 @@ export default defineComponent({
   name: 'SeatMap',
   setup() {
     const reservas = ref<Reserva[]>([]);
+    const sala = ref<Sala | null>(null);
     const router = useRouter();
     const route = useRoute();
     const numeroFilas = ref<number>(0);
     const numeroColumnas = ref<number>(0);
+    const nombreSala = ref<string>();
     const rows: Ref<number[]> = ref([]);
     const cols: Ref<number[]> = ref([]);
 
@@ -40,23 +42,50 @@ export default defineComponent({
       try {
         const id = Number(route.params.id);
         const respuesta = await fetch(`/api/funcion/${id}/reservas`);
+
         if (!respuesta.ok) {
           throw new Error('Error al obtener las reservas');
         }
+
         const data: Reserva[] = await respuesta.json();
         reservas.value = data;
-        numeroFilas.value = data[0]?.sala?.numeroFilas || 0;
-        numeroColumnas.value = data[0]?.sala?.numeroColumnas || 0;
-        inicializarAsientos();
         actualizarAsientosReservados();
+
+        console.log("Reservas cargadas para la función " + id);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    const cargarSala = async () => {
+      try {
+        const id = Number(route.params.id);
+        const respuesta = await fetch(`/api/Funcion/${id}`);
+
+        if (!respuesta.ok) {
+          throw new Error('Error al obtener los detalles de la sala');
+        }
+
+        const data = await respuesta.json();
+        sala.value = data.sala; 
+        nombreSala.value = data.sala?.nombre;
+        numeroFilas.value = data.sala?.numeroFilas || 0;
+        numeroColumnas.value = data.sala?.numeroColumnas || 0;
+
+        inicializarAsientos();
+
+        console.log("Sala cargada: " + data.sala?.nombre);
       } catch (error) {
         console.error(error);
       }
     };
 
     onMounted(() => {
-      cargarReservas();
+      cargarSala().then(() => {
+        cargarReservas(); 
+      });
     });
+
     const defaultColor = '#9dacbb';
     const selectedColor = '#00ff4c';
     const reservedColor = '#ff0000';
@@ -69,7 +98,7 @@ export default defineComponent({
 
       rows.value.forEach((row: number) => {
         cols.value.forEach((col: number) => {
-          if (!(row >= 4 && col === 7)) { 
+          if (!(row >= 4 && col === 7)) {
             const key = `row${row}col${col}`;
             seats[key] = { row, col, color: defaultColor };
           }
@@ -92,7 +121,7 @@ export default defineComponent({
     };
 
     const getColsForRow = (row: number) => {
-      return row >= 4 ? cols.value.filter((col: number )=> col !== 7) : cols.value;
+      return row >= 4 ? cols.value.filter((col: number) => col !== 7) : cols.value;
     };
 
     const getSeatColor = ({ row, col }: { row: number; col: number }): string => {
@@ -117,6 +146,7 @@ export default defineComponent({
     };
 
     return {
+      sala,
       rows,
       getColsForRow,
       getSeatColor,
@@ -128,12 +158,18 @@ export default defineComponent({
 
 <template>
   <div class="sala_container">
+    <h2>Bienvenido a la {{ sala?.nombre }}</h2>
     <h2>Haz click en donde te quieres sentar</h2>
-    <svg width="30%" viewBox="0 0 200 200" class="sala_svg" preserveAspectRatio="xMidYMid meet">
+    <svg width="30%" viewBox="0 0 200 120" class="sala_svg" preserveAspectRatio="xMidYMid meet">
       <g v-for="row in rows" :key="row">
         <rect v-for="col in getColsForRow(row)" :key="col" :x="col * 10 - 10" :y="row * 10 - 10" width="9" height="9"
           :fill="getSeatColor({ row, col })" @click="toggleSeatColor({ row, col })" />
       </g>
     </svg>
+    <div class="sala_div">
+      <button class="sala_boton">Comprar</button>
+      <button class="sala_boton">Volver</button>
+    </div>
+
   </div>
 </template>

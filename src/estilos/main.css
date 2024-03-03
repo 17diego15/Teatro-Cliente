@@ -646,6 +646,28 @@
 
 .sala_svg {
   display: flex;
-  justify-content: center; /* Centra horizontalmente el contenido del SVG */
-  align-items: center; /* Centra verticalmente el contenido del SVG */
+  justify-content: center; 
+  align-items: center; 
+}
+
+.sala_boton{
+  background-color: var(--boton);
+  color: var(--blanco);
+  border-color: var(--blanco);
+  border-width: 1px;
+  border-style: solid;
+  width: 13rem;
+  height: 2.5rem;
+  cursor: pointer;
+}
+
+.sala_boton:hover{
+  background-color: var(--botonActivo);
+  border: 0;
+}
+
+.sala_div{
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
 }
