@@ -555,7 +555,7 @@
 }
 
 .dashboard_menu_container{
-  width: 30%;
+  width: 20%;
   background-color: var(--menuDashboard);
   display: flex;
   flex-direction: column;
@@ -573,7 +573,21 @@
   cursor: pointer; 
 }
 
-.dashboard_contenido {
+.dashboard_contenido_funciones {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr; 
+  gap: 1rem;
+  align-items: center; 
+}
+
+.dashboard_contenido_obras {
+  display: grid;
+  grid-template-columns: 0.5fr 0.5fr 0.5fr 1fr 0.5fr 0.5fr; 
+  gap: 1rem;
+  align-items: center; 
+}
+
+.dashboard_contenido_usuarios{
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr; 
   gap: 1rem;
@@ -595,6 +609,11 @@
 
 .dashboard_iconos svg{
   height: 2rem;
+  fill: var(--blanco);
+}
+
+.dashboard_iconos svg:hover{
+  fill: var(--botonActivo);
 }
 
 /*register*/
