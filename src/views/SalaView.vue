@@ -90,7 +90,7 @@ export default defineComponent({
         reservaID: 0, 
         funcionID: reserva.funcionID,
         numeroFila: reserva.numeroFila,
-        numeroColumna: reserva.numeroColumna >= 7 && reserva.numeroFila >= 4 ? reserva.numeroColumna + 1 : reserva.numeroColumna,
+        numeroColumna: reserva.numeroColumna >= 7 && reserva.numeroFila >= 4 ? reserva.numeroColumna - 1 : reserva.numeroColumna,
       }));
 
       try {
