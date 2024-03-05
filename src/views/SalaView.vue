@@ -3,6 +3,13 @@ import { defineComponent, reactive, ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import type { Ref } from 'vue';
 
+interface AsientoSeleccionado {
+  funcionID: number;
+  numeroFila: number;
+  numeroColumna: number;
+}
+
+
 interface Seat {
   row: number;
   col: number;
@@ -37,7 +44,7 @@ export default defineComponent({
     const rows: Ref<number[]> = ref([]);
     const cols: Ref<number[]> = ref([]);
 
-
+    const reservasParaEnviar = ref<AsientoSeleccionado[]>([]);
     const cargarReservas = async () => {
       try {
         const id = Number(route.params.id);
@@ -51,7 +58,6 @@ export default defineComponent({
         reservas.value = data;
         actualizarAsientosReservados();
 
-        console.log("Reservas cargadas para la función " + id);
       } catch (error) {
         console.error(error);
       }
@@ -67,22 +73,46 @@ export default defineComponent({
         }
 
         const data = await respuesta.json();
-        sala.value = data.sala; 
+        sala.value = data.sala;
         nombreSala.value = data.sala?.nombre;
         numeroFilas.value = data.sala?.numeroFilas || 0;
         numeroColumnas.value = data.sala?.numeroColumnas || 0;
 
         inicializarAsientos();
 
-        console.log("Sala cargada: " + data.sala?.nombre);
       } catch (error) {
         console.error(error);
       }
     };
 
+    const comprarAsientos = async () => {
+      const reservasAjustadas = reservasParaEnviar.value.map(reserva => ({
+        reservaID: 0, 
+        funcionID: reserva.funcionID,
+        numeroFila: reserva.numeroFila,
+        numeroColumna: reserva.numeroColumna >= 7 && reserva.numeroFila >= 4 ? reserva.numeroColumna + 1 : reserva.numeroColumna,
+      }));
+
+      try {
+        const respuesta = await fetch('/api/reserva', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(reservasAjustadas), 
+        });
+
+        if (!respuesta.ok) {
+          throw new Error('Error al realizar las reservas');
+        }
+
+      } catch (error) {
+        console.error('Error al realizar las reservas: ', error);
+      }
+    };
     onMounted(() => {
       cargarSala().then(() => {
-        cargarReservas(); 
+        cargarReservas();
       });
     });
 
@@ -135,12 +165,17 @@ export default defineComponent({
         if (seats[key].color === reservedColor) {
           alert('Este asiento ya está ocupado.');
         } else {
-          seats[key].color = seats[key].color === defaultColor ? selectedColor : defaultColor;
-          let displayCol = col;
-          if (row >= 4 && col > 7) {
-            displayCol -= 1;
+          if (seats[key].color === defaultColor) {
+            seats[key].color = selectedColor;
+            const id = Number(route.params.id);
+            reservasParaEnviar.value.push({ numeroFila: row, numeroColumna: col, funcionID: id });
+          } else {
+            seats[key].color = defaultColor;
+            const index = reservasParaEnviar.value.findIndex(s => s.numeroFila === row && s.numeroColumna === col);
+            if (index !== -1) {
+              reservasParaEnviar.value.splice(index, 1);
+            }
           }
-          console.log(`Fila ${row}, Asiento ${displayCol}`);
         }
       }
     };
@@ -151,6 +186,7 @@ export default defineComponent({
       getColsForRow,
       getSeatColor,
       toggleSeatColor,
+      comprarAsientos
     };
   },
 });
@@ -167,7 +203,7 @@ export default defineComponent({
       </g>
     </svg>
     <div class="sala_div">
-      <button class="sala_boton">Comprar</button>
+      <button class="sala_boton" @click="comprarAsientos">Comprar</button>
       <button class="sala_boton">Volver</button>
     </div>
 
