@@ -45,6 +45,10 @@ export default defineComponent({
     const cols: Ref<number[]> = ref([]);
 
     const reservasParaEnviar = ref<AsientoSeleccionado[]>([]);
+
+    const volver = async () => { 
+      router.push("/cartelera")
+    }
     const cargarReservas = async () => {
       try {
         const id = Number(route.params.id);
@@ -105,11 +109,12 @@ export default defineComponent({
         if (!respuesta.ok) {
           throw new Error('Error al realizar las reservas');
         }
-
+        router.push('/')
       } catch (error) {
         console.error('Error al realizar las reservas: ', error);
       }
     };
+    
     onMounted(() => {
       cargarSala().then(() => {
         cargarReservas();
@@ -186,7 +191,8 @@ export default defineComponent({
       getColsForRow,
       getSeatColor,
       toggleSeatColor,
-      comprarAsientos
+      comprarAsientos,
+      volver
     };
   },
 });
@@ -204,7 +210,7 @@ export default defineComponent({
     </svg>
     <div class="sala_div">
       <button class="sala_boton" @click="comprarAsientos">Comprar</button>
-      <button class="sala_boton">Volver</button>
+      <button class="sala_boton" @click="volver">Volver</button>
     </div>
 
   </div>
