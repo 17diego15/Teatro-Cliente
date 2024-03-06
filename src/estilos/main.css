@@ -14,6 +14,8 @@
   --titulo: #3198f7;
   --menuDashboard: #3f3f3f;
   --menuDashboardselecion:#757575;
+  --bordeInput: #007bff;
+  --sombraBordeInput: rgba(0, 123, 255, 0.5);
 }
 
 /* Cabecera */
@@ -554,7 +556,7 @@
   gap: 2rem;
 }
 
-.dashboard_menu_container{
+.dashboard_menu_izquierda{
   width: 20%;
   background-color: var(--menuDashboard);
   display: flex;
@@ -562,15 +564,19 @@
   text-indent: 2rem;
 }
 
-.dashboard_menu_container p {
+.dashboard_menu_izquierda p {
   height: 6rem;
   display: flex;
   align-items: center;
 }
 
-.dashboard_menu_container p:hover {
+.dashboard_menu_izquierda p:hover {
   background-color: var(--menuDashboardselecion);
   cursor: pointer; 
+}
+
+.dashboard_menu_derecha{
+  width: 80%;
 }
 
 .dashboard_contenido_funciones {
@@ -614,6 +620,54 @@
 
 .dashboard_iconos svg:hover{
   fill: var(--botonActivo);
+}
+
+.dashboard_put{
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.dashboard_put input{
+  width: 10rem;
+  height: 2rem;
+  border: 1px solid var(--blanco);
+  border-radius: 5px;
+  padding: 8px;
+  font-size: 16px;
+  background-color: var(--boton);
+  padding: 10px;
+  font-size: 16px;
+  outline: none;
+  color: var(--blanco);
+}
+
+.dashboard_put input:focus {
+  border-color: var(--bordeInput); 
+  box-shadow: 0 0 5px var(--sombraBordeInput);
+}
+
+.dashboard_put textarea{
+  width: 20rem;
+  height: 20rem;
+  border: 1px solid var(--blanco);
+  border-radius: 5px;
+  padding: 8px;
+  font-size: 16px;
+  background-color: var(--boton);
+  padding: 10px;
+  font-size: 16px;
+  outline: none;
+  color: var(--blanco);
+}
+
+.dashboard_botones{
+  display: flex;
+  flex-direction: column;
+  width: 10rem;
 }
 
 /*register*/

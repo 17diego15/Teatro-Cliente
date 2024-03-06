@@ -33,7 +33,7 @@ export default defineComponent({
     onMounted(async () => {
       const obraId = route.params.id;
       try {
-        const response = await fetch(`/api/funcion/obras/${obraId}`);
+        const response = await fetch(`/api/obras/${obraId}/funcion`);
         if (!response.ok) {
           throw new Error('Funciones no encontradas');
         }
