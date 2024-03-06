@@ -13,8 +13,18 @@ export default defineComponent({
         };
     },
     methods: {
+        validarContraseña(contraseña: string): boolean {
+            const tieneLongitudSuficiente = contraseña.length >= 8;
+            const contieneSimbolo = /[!@#$%^&*(),.?":{}|<>]/.test(contraseña);
+            const contieneMayuscula = /[A-Z]/.test(contraseña);
+            return tieneLongitudSuficiente && contieneSimbolo && contieneMayuscula;
+        },
         async submitForm() {
-            const router = useRouter(); 
+            const router = useRouter();
+            if (!this.validarContraseña(this.contraseña)) {
+                alert('La contraseña debe tener más de 8 caracteres, contener al menos un símbolo y una letra mayúscula.');
+                return; 
+            }
             try {
                 const response = await fetch('/api/usuario', {
                     method: 'POST',
@@ -49,7 +59,8 @@ export default defineComponent({
                 placeholder="Nombre de usuario">
             <input type="password" v-model="contraseña" name="contraseña" id="contraseña" placeholder="Contraseña">
             <button type="submit">Enviar</button>
-            <p>¿Tienes una cuenta? <RouterLink to="/login">Inicia sesion</RouterLink></p>
+            <p>¿Tienes una cuenta? <RouterLink to="/login">Inicia sesion</RouterLink>
+            </p>
         </form>
     </div>
 </template>
