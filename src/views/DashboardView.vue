@@ -229,7 +229,7 @@ export default defineComponent({
     </div>
     <div class="dashboard_menu_derecha">
       <div v-if="seccionActiva === 'obras' && mostrandoFormularioEdicion && obraAEditar">
-        <form @submit.prevent="enviarEdicion">
+        <form @submit.prevent="enviarEdicion" class="dashboard_menu_container">
           <div class="dashboard_put">
             <label for="titulo">Título:</label>
             <input id="titulo" type="text" v-model="obraAEditar.titulo" placeholder="Título" />
@@ -244,7 +244,7 @@ export default defineComponent({
             <label for="imagen">URL de la Imagen:</label>
             <input id="imagen" type="text" v-model="obraAEditar.imagen" placeholder="URL de la imagen" />
             <label>Actores:</label>
-            <div v-for="(actor, index) in obraAEditar.actores" :key="actor.actorId">
+            <div class="dashboard_put_actores" v-for="(actor, index) in obraAEditar.actores" :key="actor.actorId">
               <input type="text" v-model="actor.actorId" placeholder="Nombre del actor" />
               <button type="button" @click="eliminarActor(index)">Eliminar actor</button>
             </div>
