@@ -27,11 +27,11 @@ interface Usuario {
 
 interface Funcion {
   funcionID: number;
-  obraID: string;
+  obraID: number;
   fecha: string;
   hora: string;
   disponibilidad: string;
-  obra: Obra;
+  obra?: Obra;
 }
 
 export default defineComponent({
@@ -74,7 +74,7 @@ export default defineComponent({
       estamosCreando.value = true;
       funcionAEditar.value = {
         funcionID: 0,
-        obraID: '',
+        obraID: 0,
         fecha: '',
         hora: '',
         disponibilidad: '',
@@ -199,7 +199,7 @@ export default defineComponent({
 
     const enviarEdicionFuncion = async () => {
       if (funcionAEditar.value) {
-        const url = estamosCreando.value ? '/api/funciones' : `/api/funciones/${funcionAEditar.value.funcionID}`;
+        const url = estamosCreando.value ? '/api/funcion' : `/api/funcion/${funcionAEditar.value.funcionID}`;
         const metodo = estamosCreando.value ? 'POST' : 'PUT';
 
         try {
@@ -282,6 +282,7 @@ export default defineComponent({
       eliminarActor,
       eliminarObra,
       crearObra,
+      crearFuncion,
       eliminarFuncion
     };
   }
@@ -294,6 +295,7 @@ export default defineComponent({
       <p @click="mostrarObras">Obras</p>
       <p @click="crearObra">Crear Obra</p>
       <p @click="mostrarFunciones">Funciones</p>
+      <p @click="crearFuncion">Crear funcion</p>
       <p @click="mostrarUsuarios">Usuarios</p>
 
     </div>
@@ -353,8 +355,8 @@ export default defineComponent({
       <div v-if="seccionActiva === 'funciones' && mostrandoFormularioEdicion && funcionAEditar">
         <form @submit.prevent="enviarEdicionFuncion" class="dashboard_menu_container">
           <div class="dashboard_put">
-            <label for="fecha">ObraId:</label>
-            <input id="o" type="date" v-model="funcionAEditar.fecha" placeholder="Fecha">
+            <label for="obraID">Obra Id:</label>
+            <input id="obraID" type="text" v-model="funcionAEditar.obraID" placeholder="Hora">
             <label for="fecha">Fecha:</label>
             <input id="fecha" type="date" v-model="funcionAEditar.fecha" placeholder="Fecha">
             <label for="hora">Hora:</label>
@@ -374,7 +376,7 @@ export default defineComponent({
         <div class="dashboard_contenido_funciones">
           <div class="dashboard_item" v-for="funcion in funciones" :key="funcion.funcionID">
             <div>{{ funcion.funcionID }}</div>
-            <div>{{ funcion.obra.titulo }}</div>
+            <div>{{ funcion.obra?.titulo }}</div>
             <div>{{ formatearFecha(funcion.fecha) }}</div>
             <div>{{ funcion.hora }}</div>
             <div class="dashboard_iconos">
