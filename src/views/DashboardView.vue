@@ -28,6 +28,7 @@ interface Usuario {
 interface Funcion {
   funcionID: number;
   obraID: number;
+  salaID: number;
   fecha: string;
   hora: string;
   disponibilidad: string;
@@ -75,6 +76,7 @@ export default defineComponent({
       funcionAEditar.value = {
         funcionID: 0,
         obraID: 0,
+        salaID: 0,
         fecha: '',
         hora: '',
         disponibilidad: '',
@@ -357,6 +359,8 @@ export default defineComponent({
           <div class="dashboard_put">
             <label for="obraID">Obra Id:</label>
             <input id="obraID" type="text" v-model="funcionAEditar.obraID" placeholder="Hora">
+            <label for="salaID">Sala Id:</label>
+            <input id="salaID" type="text" v-model="funcionAEditar.salaID" placeholder="Hora">
             <label for="fecha">Fecha:</label>
             <input id="fecha" type="date" v-model="funcionAEditar.fecha" placeholder="Fecha">
             <label for="hora">Hora:</label>
