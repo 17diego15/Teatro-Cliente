@@ -588,7 +588,7 @@
 
 .dashboard_contenido_obras {
   display: grid;
-  grid-template-columns: 0.5fr 0.5fr 0.5fr 1fr 0.5fr 0.5fr; 
+  grid-template-columns: 0.5fr 0.5fr 0.5fr 0.5fr 1fr 0.5fr 0.5fr; 
   gap: 1rem;
   align-items: center; 
 }
@@ -602,6 +602,7 @@
 
 .dashboard_item {
   display: contents;
+  text-align: center;
 }
 
 .dashboard_contenido_tabla {
@@ -699,6 +700,11 @@
 .dashboard_put_actores button:hover{
   background-color: var(--botonActivo);
   border: none;
+}
+
+.dashboard_encabezado {
+  font-weight: bold; 
+  text-align: center;
 }
 
 /*register*/
