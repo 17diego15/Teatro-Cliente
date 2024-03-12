@@ -82,7 +82,7 @@ export default defineComponent({
     };
 
     const mostrarActores = () => {
-      seccionActiva.value = 'salas';
+      seccionActiva.value = 'actores';
       mostrandoFormularioEdicion.value = false;
       actorAEditar.value = null;
       cargarActores();
@@ -394,7 +394,7 @@ export default defineComponent({
           throw new Error('Error al obtener los actores');
         }
         const data: Actor[] = await respuesta.json();
-        actor.value = data;
+        actores.value = data;
       } catch (error) {
         console.error(error);
       }
@@ -548,6 +548,7 @@ export default defineComponent({
       crearObra,
       crearFuncion,
       crearSala,
+      crearActor,
       eliminarFuncion
     };
   }
@@ -726,10 +727,8 @@ export default defineComponent({
         </div>
       </div>
 
-
-
       <div v-if="seccionActiva === 'actores' && !mostrandoFormularioEdicion">
-        <div class="dashboard_contenido_funciones">
+        <div class="dashboard_contenido_actores">
           <div class="dashboard_item dashboard_encabezado">
             <div>Id Actor</div>
             <div>Nombre</div>
@@ -753,7 +752,6 @@ export default defineComponent({
         </div>
       </div>
 
-      <!-- Formulario para Editar/Añadir Actores -->
       <div v-if="seccionActiva === 'actores' && mostrandoFormularioEdicion && actorAEditar">
         <form @submit.prevent="enviarEdicionActor" class="dashboard_menu_container">
           <div class="dashboard_put">
@@ -766,9 +764,6 @@ export default defineComponent({
           </div>
         </form>
       </div>
-
-
-
 
       <div v-if="seccionActiva === 'salas' && mostrandoFormularioEdicion && salaAEditar">
         <form @submit.prevent="enviarEdicionSala" class="dashboard_menu_container">

@@ -600,13 +600,20 @@
   align-items: center; 
 }
 
+.dashboard_contenido_actores{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr; 
+  gap: 1rem;
+  align-items: center; 
+}
+
 .dashboard_item {
   display: contents;
   text-align: center;
 }
 
 .dashboard_contenido_tabla {
-  padding-left:25% ;
+  padding-left:30%;
 }
 
 .dashboard_iconos{
