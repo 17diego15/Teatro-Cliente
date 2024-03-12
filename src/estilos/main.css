@@ -588,7 +588,7 @@
 
 .dashboard_contenido_obras {
   display: grid;
-  grid-template-columns: 0.5fr 0.5fr 0.5fr 1fr 0.5fr 0.5fr; 
+  grid-template-columns: 0.5fr 0.5fr 0.5fr 0.5fr 1fr 0.5fr 0.5fr; 
   gap: 1rem;
   align-items: center; 
 }
@@ -600,12 +600,20 @@
   align-items: center; 
 }
 
+.dashboard_contenido_actores{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr; 
+  gap: 1rem;
+  align-items: center; 
+}
+
 .dashboard_item {
   display: contents;
+  text-align: center;
 }
 
 .dashboard_contenido_tabla {
-  padding-left:25% ;
+  padding-left:30%;
 }
 
 .dashboard_iconos{
@@ -630,6 +638,11 @@
   align-items: center;
 }
 
+.dashboard_menu_container{
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
 
 .dashboard_put input{
   width: 10rem;
@@ -667,7 +680,38 @@
 .dashboard_botones{
   display: flex;
   flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+}
+
+.dashboard_put_actores{
+  display: flex;
+  gap: 2rem;
+}
+
+.dashboard_put_actores button, .dashboard_botones button{
+  background-color: var(--boton);
+  color: var(--blanco);
+  border-color: var(--blanco);
+  border-width: 1px;
+  border-style: solid;
   width: 10rem;
+  height: 2rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+}
+
+.dashboard_put_actores button:hover{
+  background-color: var(--botonActivo);
+  border: none;
+}
+
+.dashboard_encabezado {
+  font-weight: bold; 
+  text-align: center;
 }
 
 /*register*/
