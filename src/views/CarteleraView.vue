@@ -2,12 +2,12 @@
 import { defineComponent, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useObrasStore } from '@/store/ObrasStore';
-import ObrasComponent from '@/components/ObraComponente.vue';
+import CarteleraComponente from '@/components/CarteleraComponente.vue';
 
 export default defineComponent({
   name: 'CarteleraView',
   components: {
-    ObrasComponent,
+    CarteleraComponente,
   },
   setup() {
     const router = useRouter();
@@ -29,6 +29,6 @@ export default defineComponent({
 
 <template>
   <div class="cartelera_section" id="obrasContainer">
-    <ObrasComponent :obras="obras" @comprar="comprarObra" />
+    <CarteleraComponente :obras="obras" @comprar="comprarObra" />
   </div>
 </template>
