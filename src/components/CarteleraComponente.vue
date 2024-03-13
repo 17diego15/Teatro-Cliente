@@ -1,6 +1,6 @@
 <script lang="ts">
-import { defineComponent } from 'vue';
-import type { PropType } from 'vue';
+import { defineComponent, type PropType } from 'vue';
+import ObraTarjeta from './TarjetaComponente.vue';
 
 interface Obra {
     obraID: number;
@@ -14,6 +14,9 @@ interface Obra {
 
 export default defineComponent({
     name: 'CarteleraComponente',
+    components: {
+        ObraTarjeta,
+    },
     props: {
         obras: Array as PropType<Obra[]>,
     },
@@ -23,9 +26,7 @@ export default defineComponent({
 
 <template>
     <div class="cartelera_section">
-        <div v-for="obra in obras" :key="obra.obraID" class="cartelera_div_img">
-            <img :src="obra.imagen" :alt="'Imagen de ' + obra.titulo">
-            <button class="cartelera_boton1" @click="$emit('comprar', obra.obraID)">Comprar</button>
-        </div>
+        <ObraTarjeta v-for="obra in obras" :key="obra.obraID" :obra="obra"
+            @comprar="$emit('comprar', $event)" />
     </div>
 </template>

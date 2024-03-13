@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref, computed } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
-import ObrasRecientesComponent from '@/components/HomeComponent.vue';
+import ObrasRecientesComponent from '@/components/HomeComponente.vue';
 import { useObrasStore } from '@/store/ObrasStore';
 
 export default defineComponent({
