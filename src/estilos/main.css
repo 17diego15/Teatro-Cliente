@@ -297,7 +297,6 @@
   flex-wrap: wrap;
   padding: 2rem;
   gap: 1rem;
-  /* Esto establece el espacio entre los elementos */
   justify-content: flex-start;
   background-color: var(--fondo);
 }
