@@ -24,5 +24,13 @@ export const useObrasStore = defineStore('obras', {
         console.error('Error al obtener las obras: ', error);
       }
     },
+    async cargarObra(id: number) {
+      try {
+        const response = await axios.get(`/api/obras/${id}`);
+        return response.data;
+      } catch (error) {
+        console.error(`Error al obtener la obra con ID ${id}: `, error);
+      }
+    },
   },
 });
