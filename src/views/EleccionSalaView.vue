@@ -1,49 +1,23 @@
 <script lang="ts">
-import { defineComponent, onMounted, ref, toRefs  } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-
-interface Obra {
-  obraID: number;
-  titulo: string;
-  imagen: string;
-}
-
-interface Funcion {
-  funcionID: number;
-  obraID: number;
-  salaID: number;
-  fecha: string;
-  hora: string;
-  disponibilidad: string;
-  obra: Obra;
-}
+import { defineComponent, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useFuncionesStore } from '@/store/FuncionesStore';
 
 export default defineComponent({
   name: 'DetalleObraView',
   props: {
-    nombreUsuario: String
+    nombreUsuario: String,
   },
-  setup(props) {
-
-    const funciones = ref<Funcion[]>([]);
-    const obra = ref<Obra | null>(null); 
+  setup() {
     const route = useRoute();
     const router = useRouter();
+    const funcionesStore = useFuncionesStore();
 
     onMounted(async () => {
-      const obraId = route.params.id;
+      const obraId = Number(route.params.id);
       try {
-        const response = await fetch(`/api/obras/${obraId}/funcion`);
-        if (!response.ok) {
-          throw new Error('Funciones no encontradas');
-        }
-        const data: Funcion[] = await response.json();
-        funciones.value = data;
-        if (data.length > 0) {
-          obra.value = data[0].obra; 
-        }
+        await funcionesStore.cargarFuncionesPorObra(obraId);
       } catch (error) {
-        console.error(error);
         router.push({ name: 'notFound' });
       }
     });
@@ -52,17 +26,17 @@ export default defineComponent({
       router.push('/cartelera');
     };
 
-    const comprar = (id: number) => {
-      //if (!props.nombreUsuario) {
-        //router.push({ name: 'login' });
-      //} else {
-        //console.log('Comprando como:', props.nombreUsuario);
-        router.push(`/sala/${id}`);
-      //}
+    const comprar = (funcionID: number) => {
+      router.push(`/sala/${funcionID}`);
     };
 
-    return { funciones, obra, volver, comprar };
-  }
+    return { 
+      funciones: funcionesStore.funciones, 
+      obra: funcionesStore.obra, 
+      volver, 
+      comprar 
+    };
+  },
 });
 </script>
 

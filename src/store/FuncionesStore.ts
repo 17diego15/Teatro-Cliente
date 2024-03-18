@@ -17,22 +17,22 @@ interface Funcion {
   obra: Obra;
 }
 
-export const useObrasStore = defineStore('obras', {
+export const useFuncionesStore = defineStore('funciones', {
   state: () => ({
     funciones: [] as Funcion[],
     obra: null as Obra | null,
   }),
   actions: {
-    async cargarFunciones(obraId: string) {
+    async cargarFuncionesPorObra(obraId: number) {
       try {
         const response = await axios.get(`/api/obras/${obraId}/funcion`);
         this.funciones = response.data;
-        if (this.funciones.length > 0) {
-          this.obra = this.funciones[0].obra;
+        if (response.data.length > 0) {
+          this.obra = response.data[0].obra; 
         }
       } catch (error) {
-        console.error(error);
-        throw new Error('No se pudieron cargar las funciones');
+        console.error('Error al cargar funciones:', error);
+        throw error;
       }
     },
   },
