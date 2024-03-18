@@ -14,6 +14,8 @@ interface Funcion {
   fecha: string;
   hora: string;
   disponibilidad: string;
+  asientosDisponibles: number;
+  asientosRestantes: number;
   obra: Obra;
 }
 

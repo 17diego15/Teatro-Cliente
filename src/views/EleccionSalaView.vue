@@ -30,11 +30,11 @@ export default defineComponent({
       router.push(`/sala/${funcionID}`);
     };
 
-    return { 
-      funciones: funcionesStore.funciones, 
-      obra: funcionesStore.obra, 
-      volver, 
-      comprar 
+    return {
+      funciones: funcionesStore.funciones,
+      obra: funcionesStore.obra,
+      volver,
+      comprar
     };
   },
 });
@@ -54,6 +54,7 @@ export default defineComponent({
         <p>{{ funcion.fecha }}</p>
         <p>{{ funcion.hora }}</p>
         <p v-if="funcion.disponibilidad === 'Si'">Disponible</p>
+        <p> Asientos: {{ funcion.asientosRestantes }}</p>
         <button v-if="funcion.disponibilidad === 'Si'" @click="comprar(funcion.funcionID)">Comprar</button>
         <p v-else>No disponible</p>
       </div>
@@ -62,4 +63,3 @@ export default defineComponent({
   </section>
   <p v-else>Obra no encontrada</p>
 </template>
-
