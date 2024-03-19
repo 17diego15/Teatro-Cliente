@@ -18,7 +18,7 @@ export const useObrasStore = defineStore('obras', {
   actions: {
     async cargarObras() {
       try {
-        const response = await axios.get('/api/obras');
+        const response = await axios.get('/api/obra');
         this.obras = response.data;
       } catch (error) {
         console.error('Error al obtener las obras: ', error);
@@ -26,7 +26,7 @@ export const useObrasStore = defineStore('obras', {
     },
     async cargarObra(id: number) {
       try {
-        const response = await axios.get(`/api/obras/${id}`);
+        const response = await axios.get(`/api/obra/${id}`);
         return response.data;
       } catch (error) {
         console.error(`Error al obtener la obra con ID ${id}: `, error);

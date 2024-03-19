@@ -209,7 +209,7 @@ export default defineComponent({
 
     const eliminarObra = async (id: number) => {
       try {
-        const respuesta = await fetch(`/api/obras/${id}`, {
+        const respuesta = await fetch(`/api/obra/${id}`, {
           method: 'DELETE'
         });
 
@@ -226,7 +226,7 @@ export default defineComponent({
 
     const cargarObras = async () => {
       try {
-        const respuesta = await fetch('/api/obras');
+        const respuesta = await fetch('/api/obra');
         if (!respuesta.ok) {
           throw new Error('Error al obtener las obras');
         }
@@ -240,7 +240,7 @@ export default defineComponent({
 
     const enviarEdicionObra = async () => {
       if (obraAEditar.value) {
-        const url = estamosCreando.value ? '/api/obras' : `/api/obras/${obraAEditar.value.obraID}`;
+        const url = estamosCreando.value ? '/api/obra' : `/api/obra/${obraAEditar.value.obraID}`;
         const metodo = estamosCreando.value ? 'POST' : 'PUT';
 
         try {
