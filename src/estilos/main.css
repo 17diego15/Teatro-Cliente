@@ -773,12 +773,12 @@
   border: 0;
 }
 
-.register_formulario a {
+.register_formulario a, .register_cuenta {
   color: var(--blanco);
   text-decoration: none;
 }
 
-.register_formulario a:hover {
+.register_formulario a:hover, .register_cuenta:hover {
   color: var(--botonActivo);
   text-decoration: underline;
 }

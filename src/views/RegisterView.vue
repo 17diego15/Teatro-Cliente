@@ -15,6 +15,5 @@ const onRegistrationSuccess = async (userData: any) => {
 <template>
   <div class="register_container">
     <RegisterForm @registration-success="onRegistrationSuccess" />
-    <p>¿Tienes una cuenta? <RouterLink to="/login">Inicia sesión</RouterLink></p>
   </div>
 </template>

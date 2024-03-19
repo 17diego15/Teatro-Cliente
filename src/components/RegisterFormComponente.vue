@@ -31,5 +31,6 @@ const submitForm = async () => {
     <input type="text" v-model="nombreUsuario" placeholder="Nombre de usuario">
     <input type="password" v-model="contraseña" placeholder="Contraseña">
     <button type="submit">Enviar</button>
+    <p>¿Tienes una cuenta? <RouterLink class="register_cuenta" to="/login">Inicia sesión</RouterLink></p>
   </form>
 </template>
