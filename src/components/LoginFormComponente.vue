@@ -25,7 +25,8 @@ const submitForm = async () => {
       <input type="text" v-model="NombreUsuario" placeholder="Nombre de usuario">
       <input type="password" v-model="Contraseña" placeholder="Contraseña">
       <button type="submit">Enviar</button>
-      <p>¿No tienes cuenta? <RouterLink to="/register">Regístrate</RouterLink></p>
+      <p>¿No tienes cuenta? <RouterLink to="/register">Regístrate</RouterLink>
+      </p>
     </form>
   </div>
 </template>

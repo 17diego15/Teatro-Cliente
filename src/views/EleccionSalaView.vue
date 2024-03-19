@@ -2,9 +2,15 @@
 import { defineComponent, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useFuncionesStore } from '@/store/FuncionesStore';
+import ObraDetalle from '@/components/SalaObraDetalleComponente.vue';
+import FuncionDetalle from '@/components/SalaFuncionDetalleComponente.vue';
 
 export default defineComponent({
   name: 'DetalleObraView',
+  components: {
+    ObraDetalle,
+    FuncionDetalle,
+  },
   props: {
     nombreUsuario: String,
   },
@@ -42,23 +48,8 @@ export default defineComponent({
 
 <template>
   <section v-if="obra" class="eleccionSala_container">
-    <div class="eleccionSala_container_div" id="eleccionSala_div1">
-      <img :src="obra.imagen" alt="Imagen de la obra" v-if="obra.imagen" />
-      <div class="eleccionSala_texto" v-if="obra.titulo">
-        <h2>{{ obra.titulo }}</h2>
-        <p>Teatro ticketon, zaragoza</p>
-      </div>
-    </div>
-    <div class="eleccionSala_div2" id="eleccionSala_div2">
-      <div v-for="funcion in funciones" :key="funcion.funcionID">
-        <p>{{ funcion.fecha }}</p>
-        <p>{{ funcion.hora }}</p>
-        <p v-if="funcion.disponibilidad === 'Si'">Disponible</p>
-        <p> Asientos: {{ funcion.asientosRestantes }}</p>
-        <button v-if="funcion.disponibilidad === 'Si'" @click="comprar(funcion.funcionID)">Comprar</button>
-        <p v-else>No disponible</p>
-      </div>
-    </div>
+    <ObraDetalle :obra="obra" />
+    <FuncionDetalle :funciones="funciones" @comprar="comprar" />
     <button id="eleccionSala_volver" @click="volver">Volver</button>
   </section>
   <p v-else>Obra no encontrada</p>
