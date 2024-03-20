@@ -22,7 +22,7 @@ export const useObrasStore = defineStore('obras', {
         this.obras = response.data;
       } catch (error) {
         console.error('Error al obtener las obras: ', error);
-      }
+      } 
     },
     async cargarObra(id: number) {
       try {
