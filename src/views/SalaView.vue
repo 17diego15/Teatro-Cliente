@@ -90,11 +90,20 @@ export default defineComponent({
     };
 
     const comprarAsientos = async () => {
+      const usuarioData = localStorage.getItem('usuario');
+      const usuarioID = usuarioData ? JSON.parse(usuarioData).usuarioID : null;
+
+      if (usuarioID === null) {
+        console.error('Usuario no identificado');
+        return;
+      }
+
       const reservasAjustadas = reservasParaEnviar.value.map(reserva => ({
         reservaID: 0,
         funcionID: reserva.funcionID,
         numeroFila: reserva.numeroFila,
         numeroColumna: reserva.numeroColumna >= 7 && reserva.numeroFila >= 4 ? reserva.numeroColumna - 1 : reserva.numeroColumna,
+        usuarioID, 
       }));
 
       try {
@@ -216,6 +225,5 @@ export default defineComponent({
       <button class="sala_boton" @click="comprarAsientos">Comprar</button>
       <button class="sala_boton" @click="volver">Volver</button>
     </div>
-
   </div>
 </template>

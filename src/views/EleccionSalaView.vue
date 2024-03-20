@@ -6,7 +6,7 @@ import ObraDetalle from '@/components/SalaObraDetalleComponente.vue';
 import FuncionDetalle from '@/components/SalaFuncionDetalleComponente.vue';
 
 export default defineComponent({
-  name: 'DetalleObraView',
+  name: 'ElecionSalaView',
   components: {
     ObraDetalle,
     FuncionDetalle,
