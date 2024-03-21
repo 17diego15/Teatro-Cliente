@@ -1,207 +1,125 @@
 <script lang="ts">
-import { defineComponent, reactive, ref, onMounted } from 'vue';
+import { defineComponent, reactive, onMounted, toRefs } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import type { Ref } from 'vue';
-
-interface AsientoSeleccionado {
-  funcionID: number;
-  numeroFila: number;
-  numeroColumna: number;
-}
-
-
-interface Seat {
-  row: number;
-  col: number;
-  color: string;
-}
-
-interface Sala {
-  salaID: number;
-  nombre: string;
-  numeroFilas: number;
-  numeroColumnas: number;
-}
-
-interface Reserva {
-  reservaID: number;
-  funciónID: number;
-  numeroFila: number;
-  numeroColumna: number;
-  sala: Sala;
-}
+import { useSeatsStore } from '@/store/SalaStore';
 
 export default defineComponent({
   name: 'SeatMap',
   setup() {
-    const reservas = ref<Reserva[]>([]);
-    const sala = ref<Sala | null>(null);
     const router = useRouter();
     const route = useRoute();
-    const numeroFilas = ref<number>(0);
-    const numeroColumnas = ref<number>(0);
-    const nombreSala = ref<string>();
-    const rows: Ref<number[]> = ref([]);
-    const cols: Ref<number[]> = ref([]);
+    const seatsStore = useSeatsStore();
 
-    const reservasParaEnviar = ref<AsientoSeleccionado[]>([]);
-
-    const volver = async () => {
-      router.push("/cartelera")
-    }
-    const cargarReservas = async () => {
-      try {
-        const id = Number(route.params.id);
-        const respuesta = await fetch(`/api/funcion/${id}/reservas`);
-
-        if (!respuesta.ok) {
-          throw new Error('Error al obtener las reservas');
-        }
-
-        const data: Reserva[] = await respuesta.json();
-        reservas.value = data;
-        actualizarAsientosReservados();
-
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    const cargarSala = async () => {
-      try {
-        const id = Number(route.params.id);
-        const respuesta = await fetch(`/api/Funcion/${id}`);
-
-        if (!respuesta.ok) {
-          throw new Error('Error al obtener los detalles de la sala');
-        }
-
-        const data = await respuesta.json();
-        sala.value = data.sala;
-        nombreSala.value = data.sala?.nombre;
-        numeroFilas.value = data.sala?.numeroFilas || 0;
-        numeroColumnas.value = data.sala?.numeroColumnas || 0;
-
-        inicializarAsientos();
-
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    const comprarAsientos = async () => {
-      const usuarioData = localStorage.getItem('usuario');
-      const usuarioID = usuarioData ? JSON.parse(usuarioData).usuarioID : null;
-
-      if (usuarioID === null) {
-        console.error('Usuario no identificado');
-        return;
-      }
-
-      const reservasAjustadas = reservasParaEnviar.value.map(reserva => ({
-        reservaID: 0,
-        funcionID: reserva.funcionID,
-        numeroFila: reserva.numeroFila,
-        numeroColumna: reserva.numeroColumna >= 7 && reserva.numeroFila >= 4 ? reserva.numeroColumna - 1 : reserva.numeroColumna,
-        usuarioID, 
-      }));
-
-      try {
-        const respuesta = await fetch('/api/reserva', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(reservasAjustadas),
-        });
-
-        if (!respuesta.ok) {
-          throw new Error('Error al realizar las reservas');
-        }
-        router.push('/')
-      } catch (error) {
-        console.error('Error al realizar las reservas: ', error);
-      }
-    };
-
-    onMounted(() => {
-      cargarSala().then(() => {
-        cargarReservas();
-      });
+    const state = reactive({
+      nombreSala: '',
+      numeroFilas: 0,
+      numeroColumnas: 0,
+      rows: [] as number[],
+      cols: [] as number[],
+      seats: {} as Record<string, { row: number; col: number; color: string; }>,
+      reservasParaEnviar: [] as { funcionID: number; numeroFila: number; numeroColumna: number; }[],
     });
 
     const defaultColor = '#9dacbb';
     const selectedColor = '#00ff4c';
     const reservedColor = '#ff0000';
 
-    const seats = reactive<Record<string, Seat>>({});
+    const volver = async () => {
+      router.push("/cartelera")
+    }
+
+    const cargarSala = async () => {
+      const id = Number(route.params.id);
+      await seatsStore.cargarSala(id);
+      if (seatsStore.sala) {
+        state.nombreSala = seatsStore.sala.nombre;
+        state.numeroFilas = seatsStore.sala.numeroFilas;
+        state.numeroColumnas = seatsStore.sala.numeroColumnas;
+        inicializarAsientos();
+      }
+    };
+
+    const cargarReservas = async () => {
+      const id = Number(route.params.id);
+      await seatsStore.cargarReservas(id);
+      actualizarAsientosReservados();
+    };
+
+    const comprarAsientos = async () => {
+      const usuarioData = localStorage.getItem('usuario');
+      const usuarioID = usuarioData ? JSON.parse(usuarioData).usuarioID : null;
+      if (usuarioID === null) {
+        console.error('Usuario no identificado');
+        return;
+      }
+      try {
+        await seatsStore.comprarAsientos(state.reservasParaEnviar, usuarioID);
+        router.push('/');
+      } catch (error) {
+        console.error('Error al realizar las reservas: ', error);
+      }
+    };
 
     const inicializarAsientos = () => {
-      rows.value = Array.from({ length: numeroFilas.value }, (_, i) => i + 1);
-      cols.value = Array.from({ length: numeroColumnas.value }, (_, i) => i + 1);
-
-      rows.value.forEach((row: number) => {
-        cols.value.forEach((col: number) => {
-          if (!(row >= 4 && col === 7)) {
-            const key = `row${row}col${col}`;
-            seats[key] = { row, col, color: defaultColor };
-          }
+      state.rows = Array.from({ length: state.numeroFilas }, (_, i) => i + 1);
+      state.cols = Array.from({ length: state.numeroColumnas }, (_, i) => i + 1);
+      state.rows.forEach(row => {
+        state.cols.forEach(col => {
+          const key = `row${row}col${col}`;
+          state.seats[key] = { row, col, color: defaultColor };
         });
       });
     };
 
-
     const actualizarAsientosReservados = () => {
-      reservas.value.forEach((reserva) => {
-        let adjustedCol = reserva.numeroColumna;
-        if (reserva.numeroFila >= 4 && reserva.numeroColumna >= 7) {
-          adjustedCol += 1;
-        }
-        const key = `row${reserva.numeroFila}col${adjustedCol}`;
-        if (seats[key]) {
-          seats[key].color = reservedColor;
+      seatsStore.reservas.forEach(reserva => {
+        const key = `row${reserva.numeroFila}col${reserva.numeroColumna}`;
+        if (state.seats[key]) {
+          state.seats[key].color = reservedColor;
         }
       });
     };
 
     const getColsForRow = (row: number) => {
-      return row >= 4 ? cols.value.filter((col: number) => col !== 7) : cols.value;
+      return row >= 4 ? state.cols.filter(col => col !== 7) : state.cols;
     };
 
-    const getSeatColor = ({ row, col }: { row: number; col: number }): string => {
+    const getSeatColor = ({ row, col }: { row: number; col: number }) => {
       const key = `row${row}col${col}`;
-      return seats[key] ? seats[key].color : '';
+      return state.seats[key] ? state.seats[key].color : '';
     };
 
-    const toggleSeatColor = ({ row, col }: { row: number; col: number }): void => {
+    const toggleSeatColor = ({ row, col }: { row: number; col: number }) => {
       const key = `row${row}col${col}`;
-      if (seats[key]) {
-        if (seats[key].color === reservedColor) {
+      if (state.seats[key]) {
+        if (state.seats[key].color === reservedColor) {
           alert('Este asiento ya está ocupado.');
         } else {
-          if (seats[key].color === defaultColor) {
-            seats[key].color = selectedColor;
-            const id = Number(route.params.id);
-            reservasParaEnviar.value.push({ numeroFila: row, numeroColumna: col, funcionID: id });
+          state.seats[key].color = state.seats[key].color === defaultColor ? selectedColor : defaultColor;
+          const id = Number(route.params.id);
+          const index = state.reservasParaEnviar.findIndex(s => s.numeroFila === row && s.numeroColumna === col);
+          if (index !== -1) {
+            state.reservasParaEnviar.splice(index,
+              1);
           } else {
-            seats[key].color = defaultColor;
-            const index = reservasParaEnviar.value.findIndex(s => s.numeroFila === row && s.numeroColumna === col);
-            if (index !== -1) {
-              reservasParaEnviar.value.splice(index, 1);
-            }
+            state.reservasParaEnviar.push({ funcionID: id, numeroFila: row, numeroColumna: col });
           }
         }
       }
     };
+    onMounted(async () => {
+      await cargarSala();
+      await cargarReservas();
+    });
 
     return {
-      sala,
-      rows,
+      ...toRefs(state),
       getColsForRow,
       getSeatColor,
       toggleSeatColor,
       comprarAsientos,
-      volver
+      volver,
+      sala: seatsStore.sala, 
     };
   },
 });

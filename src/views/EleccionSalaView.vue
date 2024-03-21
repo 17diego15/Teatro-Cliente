@@ -5,6 +5,24 @@ import { useFuncionesStore } from '@/store/FuncionesStore';
 import ObraDetalle from '@/components/SalaObraDetalleComponente.vue';
 import FuncionDetalle from '@/components/SalaFuncionDetalleComponente.vue';
 
+interface Funcion {
+  funcionID: number;
+  obraID: number;
+  salaID: number;
+  fecha: string;
+  hora: string;
+  disponibilidad: string;
+  asientosDisponibles: number;
+  asientosRestantes: number;
+  obra: Obra;
+}
+
+interface Obra {
+  obraID: number;
+  titulo: string;
+  imagen: string;
+}
+
 export default defineComponent({
   name: 'ElecionSalaView',
   components: {
@@ -19,8 +37,8 @@ export default defineComponent({
     const router = useRouter();
     const funcionesStore = useFuncionesStore();
 
-    const funciones = ref([]);
-    const obra = ref(null);
+    const funciones = ref<Funcion[]>([]);
+    const obra = ref<Obra | null>(null);
 
     const cargarDatos = async () => {
       const obraId = Number(route.params.id);
