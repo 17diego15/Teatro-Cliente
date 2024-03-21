@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, onMounted } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useFuncionesStore } from '@/store/FuncionesStore';
 import ObraDetalle from '@/components/SalaObraDetalleComponente.vue';
@@ -19,14 +19,22 @@ export default defineComponent({
     const router = useRouter();
     const funcionesStore = useFuncionesStore();
 
-    onMounted(async () => {
+    const funciones = ref([]);
+    const obra = ref(null);
+
+    const cargarDatos = async () => {
       const obraId = Number(route.params.id);
       try {
         await funcionesStore.cargarFuncionesPorObra(obraId);
+        funciones.value = funcionesStore.funciones;
+        obra.value = funcionesStore.obra;
       } catch (error) {
+        console.error('Error al cargar funciones:', error);
         router.push({ name: 'notFound' });
       }
-    });
+    };
+
+    watch(() => route.params.id, cargarDatos, { immediate: true });
 
     const volver = () => {
       router.push('/cartelera');
@@ -37,10 +45,10 @@ export default defineComponent({
     };
 
     return {
-      funciones: funcionesStore.funciones,
-      obra: funcionesStore.obra,
+      funciones,
+      obra,
       volver,
-      comprar
+      comprar,
     };
   },
 });
