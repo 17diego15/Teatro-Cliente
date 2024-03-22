@@ -1,14 +1,22 @@
 <script lang="ts">
-import { defineComponent, reactive, onMounted, toRefs } from 'vue';
+import { defineComponent, reactive, onMounted, toRefs, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useSeatsStore } from '@/store/SalaStore';
+import Sala1 from '@/components/Sala1Componente.vue';
+import Sala from '@/components/SalaNombreComponente.vue';
 
 export default defineComponent({
   name: 'SeatMap',
+  components: {
+    Sala1,
+    Sala,
+  },
   setup() {
     const router = useRouter();
     const route = useRoute();
     const seatsStore = useSeatsStore();
+    console.log(seatsStore)
+    const sala = computed(() => seatsStore.sala);
 
     const state = reactive({
       nombreSala: '',
@@ -110,6 +118,7 @@ export default defineComponent({
     onMounted(async () => {
       await cargarSala();
       await cargarReservas();
+      console.log(seatsStore.sala);
     });
 
     return {
@@ -119,7 +128,7 @@ export default defineComponent({
       toggleSeatColor,
       comprarAsientos,
       volver,
-      sala: seatsStore.sala, 
+      sala,
     };
   },
 });
@@ -127,18 +136,11 @@ export default defineComponent({
 
 <template>
   <div class="sala_container">
-    <h2>Bienvenido a la {{ sala?.nombre }}</h2>
-    <h2>Haz click en donde te quieres sentar</h2>
-    <svg width="40%" viewBox="0 0 200 120" class="sala_svg" preserveAspectRatio="xMidYMid meet">
-      <g v-for="row in rows" :key="row">
-        <g v-for="col in getColsForRow(row)" :key="col">
-          <rect :x="col * 10 - 10" :y="row * 10 - 10" width="9" height="9" :fill="getSeatColor({ row, col })"
-            @click="toggleSeatColor({ row, col })" />
-          <text :x="col * 10 - (col > 7 && row >= 4 ? 7.5 : 7.5)" :y="row * 10 - 5" fill="black" font-size="3"
-            @click="toggleSeatColor({ row, col })">{{ row }}-{{ col > 7 && row >= 4 ? col - 1 : col }}</text>
-        </g>
-      </g>
-    </svg>
+    <Sala :nombreSala="sala?.nombre" />
+    <Sala1 v-if="sala?.salaID === 1" :rows="rows" :getColsForRow="getColsForRow" :getSeatColor="getSeatColor"
+      :toggleSeatColor="toggleSeatColor" />
+
+
     <div class="sala_div">
       <button class="sala_boton" @click="comprarAsientos">Comprar</button>
       <button class="sala_boton" @click="volver">Volver</button>
