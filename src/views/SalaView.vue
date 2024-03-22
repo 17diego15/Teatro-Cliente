@@ -3,12 +3,23 @@ import { defineComponent, reactive, onMounted, toRefs, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useSeatsStore } from '@/store/SalaStore';
 import Sala1 from '@/components/Sala1Componente.vue';
+import Sala2 from '@/components/Sala2Componente.vue';
+import Sala3 from '@/components/Sala3Componente.vue';
+import Sala4 from '@/components/Sala4Componente.vue';
+import Sala5 from '@/components/Sala5Componente.vue';
+import Sala6 from '@/components/Sala6Componente.vue';
+
 import Sala from '@/components/SalaNombreComponente.vue';
 
 export default defineComponent({
   name: 'SeatMap',
   components: {
     Sala1,
+    Sala2,
+    Sala3,
+    Sala4,
+    Sala5,
+    Sala6,
     Sala,
   },
   setup() {
@@ -139,8 +150,16 @@ export default defineComponent({
     <Sala :nombreSala="sala?.nombre" />
     <Sala1 v-if="sala?.salaID === 1" :rows="rows" :getColsForRow="getColsForRow" :getSeatColor="getSeatColor"
       :toggleSeatColor="toggleSeatColor" />
-
-
+    <Sala2 v-else-if="sala?.salaID === 2" :rows="rows" :getColsForRow="getColsForRow" :getSeatColor="getSeatColor"
+      :toggleSeatColor="toggleSeatColor" />
+    <Sala3 v-else-if="sala?.salaID === 3" :rows="rows" :getColsForRow="getColsForRow" :getSeatColor="getSeatColor"
+      :toggleSeatColor="toggleSeatColor" />
+    <Sala4 v-else-if="sala?.salaID === 4" :rows="rows" :getColsForRow="getColsForRow" :getSeatColor="getSeatColor"
+      :toggleSeatColor="toggleSeatColor" />
+    <Sala5 v-else-if="sala?.salaID === 5" :rows="rows" :getColsForRow="getColsForRow" :getSeatColor="getSeatColor"
+      :toggleSeatColor="toggleSeatColor" />
+    <Sala6 v-else-if="sala?.salaID === 6" :rows="rows" :getColsForRow="getColsForRow" :getSeatColor="getSeatColor"
+      :toggleSeatColor="toggleSeatColor" />
     <div class="sala_div">
       <button class="sala_boton" @click="comprarAsientos">Comprar</button>
       <button class="sala_boton" @click="volver">Volver</button>
