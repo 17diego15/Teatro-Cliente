@@ -8,7 +8,7 @@ import Sala3 from '@/components/Sala3Componente.vue';
 import Sala4 from '@/components/Sala4Componente.vue';
 import Sala5 from '@/components/Sala5Componente.vue';
 import Sala6 from '@/components/Sala6Componente.vue';
-
+import FormularioPago from '@/components/FormularioPagoComponente.vue'
 import Sala from '@/components/SalaNombreComponente.vue';
 
 export default defineComponent({
@@ -21,6 +21,7 @@ export default defineComponent({
     Sala5,
     Sala6,
     Sala,
+    FormularioPago
   },
   setup() {
     const router = useRouter();
@@ -37,6 +38,7 @@ export default defineComponent({
       cols: [] as number[],
       seats: {} as Record<string, { row: number; col: number; color: string; }>,
       reservasParaEnviar: [] as { funcionID: number; numeroFila: number; numeroColumna: number; }[],
+      mostrarFormularioPago: false,
     });
 
     const defaultColor = '#9dacbb';
@@ -46,6 +48,10 @@ export default defineComponent({
     const volver = async () => {
       router.push("/cartelera")
     }
+
+    const cerrarModal = () => {
+      state.mostrarFormularioPago = false;
+    };
 
     const cargarSala = async () => {
       const id = Number(route.params.id);
@@ -64,19 +70,22 @@ export default defineComponent({
       actualizarAsientosReservados();
     };
 
-    const comprarAsientos = async () => {
-      const usuarioData = localStorage.getItem('usuario');
-      const usuarioID = usuarioData ? JSON.parse(usuarioData).usuarioID : null;
-      if (usuarioID === null) {
-        console.error('Usuario no identificado');
-        return;
-      }
+    const comprarAsientos = () => {
+      state.mostrarFormularioPago = true;
+    };
+
+    const finalizarCompra = async () => {
       try {
+        const usuarioData = localStorage.getItem('usuario');
+        const usuarioID = usuarioData ? JSON.parse(usuarioData).usuarioID : null;
         await seatsStore.comprarAsientos(state.reservasParaEnviar, usuarioID);
+        cerrarModal();
+        state.mostrarFormularioPago = false;
         router.push('/');
       } catch (error) {
         console.error('Error al realizar las reservas: ', error);
       }
+      state.mostrarFormularioPago = false;
     };
 
     const inicializarAsientos = () => {
@@ -131,7 +140,6 @@ export default defineComponent({
       await cargarReservas();
       console.log(seatsStore.sala);
     });
-
     return {
       ...toRefs(state),
       getColsForRow,
@@ -140,6 +148,8 @@ export default defineComponent({
       comprarAsientos,
       volver,
       sala,
+      finalizarCompra,
+      cerrarModal,
     };
   },
 });
@@ -160,6 +170,12 @@ export default defineComponent({
       :toggleSeatColor="toggleSeatColor" />
     <Sala6 v-else-if="sala?.salaID === 6" :rows="rows" :getColsForRow="getColsForRow" :getSeatColor="getSeatColor"
       :toggleSeatColor="toggleSeatColor" />
+    <div v-if="mostrarFormularioPago" class="modal" @click.self="cerrarModal">
+      <div class="modal-content">
+        <span class="close-modal" @click="cerrarModal">&times;</span>
+        <FormularioPago @onSubmitSuccess="finalizarCompra" />
+      </div>
+    </div>
     <div class="sala_div">
       <button class="sala_boton" @click="comprarAsientos">Comprar</button>
       <button class="sala_boton" @click="volver">Volver</button>
