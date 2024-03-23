@@ -59,5 +59,27 @@ export const useSeatsStore = defineStore('seats', {
         throw error;
       }
     },
+    async enviarPedido(usuarioID: number, funcionID: number, asientosSeleccionados: AsientoSeleccionado[]) {
+      try {
+        const funcionInfo = await axios.get(`/api/funcion/${funcionID}`);
+        const precioPorAsiento = funcionInfo.data.obra.precio; 
+        const precioTotal = asientosSeleccionados.length * precioPorAsiento;
+        const numeroDeReservas = asientosSeleccionados.length;
+        const fecha = new Date().toISOString(); 
+        const pedido = {
+          usuarioID,
+          funcionID,
+          precio: precioPorAsiento,
+          precioTotal,
+          fecha,
+          numeroDeReservas,
+        };
+        const response = await axios.post('/api/pedido', pedido);
+        return response.data;
+      } catch (error) {
+        console.error('Error al enviar el pedido', error);
+        throw error;
+      }
+    },
   },
 });

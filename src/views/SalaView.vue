@@ -79,6 +79,9 @@ export default defineComponent({
         const usuarioData = localStorage.getItem('usuario');
         const usuarioID = usuarioData ? JSON.parse(usuarioData).usuarioID : null;
         await seatsStore.comprarAsientos(state.reservasParaEnviar, usuarioID);
+        const funcionID = Number(route.params.id);
+        await seatsStore.enviarPedido(usuarioID, funcionID, state.reservasParaEnviar);
+
         cerrarModal();
         state.mostrarFormularioPago = false;
         router.push('/');
