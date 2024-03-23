@@ -27,7 +27,7 @@ export const useFuncionesStore = defineStore('funciones', {
   actions: {
     async cargarFuncionesPorObra(obraId: number) {
       try {
-        const response = await axios.get(`/api/obras/${obraId}/funcion`);
+        const response = await axios.get(`/api/funcion?obraID=${obraId}`);
         this.funciones = response.data;
         if (response.data.length > 0) {
           this.obra = response.data[0].obra; 

@@ -38,7 +38,7 @@ export const useSeatsStore = defineStore('seats', {
     },
     async cargarReservas(funcionID: number) {
       try {
-        const response = await axios.get(`/api/funcion/${funcionID}/reservas`);
+        const response = await axios.get(`/api/reserva?funcionID=${funcionID}`);
         this.reservas = response.data;
       } catch (error) {
         console.error('Error al obtener las reservas', error);
