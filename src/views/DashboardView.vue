@@ -2,6 +2,12 @@
 import { defineComponent, ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
+import { useObrasStore } from '@/store/ObrasStore';
+import { useFuncionesStore } from '@/store/FuncionesStore';
+import { useUsuariosStore } from '@/store/UsuarioStore';
+import { useActoresStore } from '@/store/ActoresStore';
+import { useSalasStore } from '@/store/SalasStore';
+
 interface Actor {
   actorId: number
   nombre: string;
@@ -15,7 +21,7 @@ interface Obra {
   duración: string;
   precio: number;
   imagen: string;
-  actores: Actor[];
+  actores?: Actor[];
 }
 
 interface Usuario {
@@ -45,6 +51,13 @@ interface Sala {
 export default defineComponent({
   name: 'Dashboard',
   setup() {
+
+    const obrasStore = useObrasStore();
+    const funcionesStore = useFuncionesStore();
+    const usuariosStore = useUsuariosStore();
+    const actoresStore = useActoresStore();
+    const salasStore = useSalasStore();
+
     const obras = ref<Obra[]>([]);
     const usuarios = ref<Usuario[]>([]);
     const funciones = ref<Funcion[]>([]);
@@ -197,7 +210,7 @@ export default defineComponent({
     const añadirActor = () => {
       if (obraAEditar.value) {
         const nuevoActor: Actor = { actorId: 0, nombre: '' };
-        obraAEditar.value.actores.push(nuevoActor);
+        obraAEditar.value.actores?.push(nuevoActor);
       }
     };
 
@@ -209,15 +222,7 @@ export default defineComponent({
 
     const eliminarObra = async (id: number) => {
       try {
-        const respuesta = await fetch(`/api/obra/${id}`, {
-          method: 'DELETE'
-        });
-
-        if (!respuesta.ok) {
-          throw new Error('Error al eliminar la obra');
-        }
-
-        console.log('Obra eliminada con éxito');
+        await obrasStore.eliminarObra(id);
         await cargarObras();
       } catch (error) {
         console.error('Error al eliminar la obra:', error);
@@ -225,38 +230,18 @@ export default defineComponent({
     };
 
     const cargarObras = async () => {
-      try {
-        const respuesta = await fetch('/api/obra');
-        if (!respuesta.ok) {
-          throw new Error('Error al obtener las obras');
-        }
-        const data: Obra[] = await respuesta.json();
-        obras.value = data;
-        actores.value = data.length > 0 && data[0].actores ? data[0].actores : [];
-      } catch (error) {
-        console.error(error);
-      }
+      await obrasStore.cargarObras();
+      obras.value = obrasStore.obras;
     };
 
     const enviarEdicionObra = async () => {
       if (obraAEditar.value) {
-        const url = estamosCreando.value ? '/api/obra' : `/api/obra/${obraAEditar.value.obraID}`;
-        const metodo = estamosCreando.value ? 'POST' : 'PUT';
-
         try {
-          const respuesta = await fetch(url, {
-            method: metodo,
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(obraAEditar.value),
-          });
-
-          if (!respuesta.ok) {
-            throw new Error('Error al guardar la obra');
+          if (estamosCreando.value) {
+            await obrasStore.crearObra(obraAEditar.value);
+          } else {
+            await obrasStore.actualizarObra(obraAEditar.value.obraID, obraAEditar.value);
           }
-
-          console.log('Obra guardada con éxito');
           mostrandoFormularioEdicion.value = false;
           estamosCreando.value = false;
           await cargarObras();
@@ -267,77 +252,33 @@ export default defineComponent({
     };
 
     const cargarFunciones = async () => {
-      try {
-        const respuesta = await fetch('/api/Funcion');
-        if (!respuesta.ok) {
-          throw new Error('Error al obtener las funciones');
-        }
-        const data: Funcion[] = await respuesta.json();
-        funciones.value = data;
-      } catch (error) {
-        console.error(error);
-      }
+      await funcionesStore.cargarFunciones();
+      funciones.value = funcionesStore.funciones;
     };
 
     const enviarEdicionFuncion = async () => {
       if (funcionAEditar.value) {
-        const url = estamosCreando.value ? '/api/funcion' : `/api/funcion/${funcionAEditar.value.funcionID}`;
-        const metodo = estamosCreando.value ? 'POST' : 'PUT';
-
-        try {
-          const respuesta = await fetch(url, {
-            method: metodo,
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(funcionAEditar.value),
-          });
-
-          if (!respuesta.ok) {
-            throw new Error('Error al enviar la función');
-          }
-
-          console.log('Función enviada con éxito');
-          await cargarFunciones();
-        } catch (error) {
-          console.error('Error al enviar la función:', error);
-        } finally {
-          mostrandoFormularioEdicion.value = false;
-          funcionAEditar.value = null;
-          estamosCreando.value = false;
+        if (estamosCreando.value) {
+          await funcionesStore.crearFuncion(funcionAEditar.value);
+        } else {
+          await funcionesStore.actualizarFuncion(funcionAEditar.value.funcionID, funcionAEditar.value);
         }
+        mostrandoFormularioEdicion.value = false;
+        estamosCreando.value = false;
+        await cargarFunciones();
       }
     };
 
     const eliminarFuncion = async (id: number) => {
-      try {
-        const respuesta = await fetch(`/api/funcion/${id}`, {
-          method: 'DELETE'
-        });
-
-        if (!respuesta.ok) {
-          throw new Error('Error al eliminar la funcion');
-        }
-
-        console.log('Funcion eliminada con éxito');
-        await cargarFunciones();
-      } catch (error) {
-        console.error('Error al eliminar la funcion:', error);
-      }
+      await funcionesStore.eliminarFuncion(id);
+      await cargarFunciones();
     };
 
     const cargarUsuarios = async () => {
-      try {
-        const respuesta = await fetch('/api/Usuario');
-        if (!respuesta.ok) {
-          throw new Error('Error al obtener los usuarios');
-        }
-        const data: Usuario[] = await respuesta.json();
-        usuarios.value = data;
-      } catch (error) {
-        console.error(error);
-      }
+      await usuariosStore.cargarUsuarios();
+      usuarios.value = usuariosStore.usuarios;
     };
+
 
     const enviarEdicionUsuario = async () => {
       if (usuarioAEditar.value) {
@@ -346,157 +287,66 @@ export default defineComponent({
           isAdmin: usuarioAEditar.value.isAdmin === 'true',
         };
         try {
-          const respuesta = await fetch(`/api/usuario/${usuarioActualizado.usuarioID}`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(usuarioActualizado),
-          });
-
-          if (!respuesta.ok) {
-            throw new Error('Error al enviar el usuario');
-          }
-
-          console.log('Usuario enviado con éxito');
+          await usuariosStore.actualizarUsuario(usuarioActualizado.usuarioID, usuarioActualizado);
+          mostrandoFormularioEdicion.value = false;
+          estamosCreando.value = false;
           await cargarUsuarios();
         } catch (error) {
           console.error('Error al enviar el usuario:', error);
-        } finally {
-          mostrandoFormularioEdicion.value = false;
-          usuarioAEditar.value = null;
-          estamosCreando.value = false;
         }
       }
     };
 
     const eliminarUsuario = async (id: number) => {
-      try {
-        const respuesta = await fetch(`/api/usuario/${id}`, {
-          method: 'DELETE'
-        });
-
-        if (!respuesta.ok) {
-          throw new Error('Error al eliminar el usuario');
-        }
-
-        console.log('Usuario eliminada con éxito');
-        await cargarUsuarios();
-      } catch (error) {
-        console.error('Error al eliminar el usuario:', error);
-      }
+      await usuariosStore.eliminarUsuario(id);
+      await cargarUsuarios();
     };
 
     const cargarActores = async () => {
-      try {
-        const respuesta = await fetch('/api/actor');
-        if (!respuesta.ok) {
-          throw new Error('Error al obtener los actores');
-        }
-        const data: Actor[] = await respuesta.json();
-        actores.value = data;
-      } catch (error) {
-        console.error(error);
-      }
+      await actoresStore.cargarActores();
+      actores.value = actoresStore.actores;
     };
+
 
     const enviarEdicionActor = async () => {
       if (actorAEditar.value) {
-        const url = estamosCreando.value ? '/api/actor' : `/api/actor/${actorAEditar.value.actorId}`;
-        const metodo = estamosCreando.value ? 'POST' : 'PUT';
-        try {
-          const respuesta = await fetch(url, {
-            method: metodo,
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(actorAEditar.value),
-          });
-          if (!respuesta.ok) {
-            throw new Error('Error al guardar el actor');
-          }
-          console.log('Actor guardado con éxito');
-          mostrandoFormularioEdicion.value = false;
-          estamosCreando.value = false;
-          await cargarActores();
-        } catch (error) {
-          console.error('Error al guardar el actor:', error);
+        if (estamosCreando.value) {
+          await actoresStore.crearActor(actorAEditar.value);
+        } else {
+          await actoresStore.actualizarActor(actorAEditar.value.actorId, actorAEditar.value);
         }
+        mostrandoFormularioEdicion.value = false;
+        estamosCreando.value = false;
+        await cargarActores();
       }
     };
 
     const eliminarActores = async (id: number) => {
-      try {
-        const respuesta = await fetch(`/api/actor/${id}`, {
-          method: 'DELETE'
-        });
-
-        if (!respuesta.ok) {
-          throw new Error('Error al eliminar el actor');
-        }
-
-        console.log('Actor eliminado con éxito');
-        await cargarActores();
-      } catch (error) {
-        console.error('Error al eliminar el actor:', error);
-      }
+      await actoresStore.eliminarActor(id);
+      await cargarActores();
     };
 
     const cargarSalas = async () => {
-      try {
-        const respuesta = await fetch('/api/sala');
-        if (!respuesta.ok) {
-          throw new Error('Error al obtener las salas');
-        }
-        const data: Sala[] = await respuesta.json();
-        salas.value = data;
-      } catch (error) {
-        console.error(error);
-      }
+      await salasStore.cargarSalas();
+      salas.value = salasStore.salas;
     };
 
+
     const eliminarSala = async (id: number) => {
-      try {
-        const respuesta = await fetch(`/api/sala/${id}`, {
-          method: 'DELETE'
-        });
-
-        if (!respuesta.ok) {
-          throw new Error('Error al eliminar la sala');
-        }
-
-        console.log('Sala eliminada con éxito');
-        await cargarSalas();
-      } catch (error) {
-        console.error('Error al eliminar la sala:', error);
-      }
+      await salasStore.eliminarSala(id);
+      await cargarSalas(); 
     };
 
     const enviarEdicionSala = async () => {
       if (salaAEditar.value) {
-        const url = estamosCreando.value ? '/api/sala' : `/api/sala/${salaAEditar.value.salaID}`;
-        const metodo = estamosCreando.value ? 'POST' : 'PUT';
-
-        try {
-          const respuesta = await fetch(url, {
-            method: metodo,
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(salaAEditar.value),
-          });
-
-          if (!respuesta.ok) {
-            throw new Error('Error al guardar la sala');
-          }
-
-          console.log('Sala guardada con éxito');
-          mostrandoFormularioEdicion.value = false;
-          estamosCreando.value = false;
-          await cargarSalas();
-        } catch (error) {
-          console.error('Error al guardar la sala:', error);
+        if (estamosCreando.value) {
+          await salasStore.crearSala(salaAEditar.value);
+        } else {
+          await salasStore.actualizarSala(salaAEditar.value.salaID, salaAEditar.value);
         }
+        mostrandoFormularioEdicion.value = false;
+        estamosCreando.value = false;
+        await cargarSalas();
       }
     };
 
@@ -616,7 +466,7 @@ export default defineComponent({
             <div>{{ obra.director }}</div>
             <div>{{ obra.precio }}€</div>
             <div>{{ obra.sinopsis }}</div>
-            <div>{{ obra.actores.map(actor => actor.nombre).join(', ') }}</div>
+            <div>{{ obra.actores?.map(actor => actor.nombre).join(', ') }}</div>
             <div class="dashboard_iconos">
               <svg @click="editarObra(obra)" class="dashboard_contenido_tabla" xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 512 512">
