@@ -962,3 +962,17 @@
   font-weight: bold;
   cursor: pointer;
 }
+
+/*pagina del usuario*/
+
+.usuario_container{
+  min-height: 100vh;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--fondo);
+  color: var(--blanco);
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem;
+}
