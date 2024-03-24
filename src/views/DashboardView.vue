@@ -334,7 +334,7 @@ export default defineComponent({
 
     const eliminarSala = async (id: number) => {
       await salasStore.eliminarSala(id);
-      await cargarSalas(); 
+      await cargarSalas();
     };
 
     const enviarEdicionSala = async () => {
@@ -349,7 +349,6 @@ export default defineComponent({
         await cargarSalas();
       }
     };
-
 
     onMounted(() => {
       cargarObras();
