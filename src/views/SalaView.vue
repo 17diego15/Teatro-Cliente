@@ -44,6 +44,7 @@ export default defineComponent({
     const defaultColor = '#9dacbb';
     const selectedColor = '#00ff4c';
     const reservedColor = '#ff0000';
+    const userReservedColor = '#0000ff';
 
     const volver = async () => {
       router.push("/cartelera")
@@ -105,10 +106,17 @@ export default defineComponent({
     };
 
     const actualizarAsientosReservados = () => {
-      seatsStore.reservas.forEach(reserva => {
+      const usuarioData = localStorage.getItem('usuario');
+      const usuarioID = usuarioData ? JSON.parse(usuarioData).usuarioID : null;
+
+      seatsStore.reservas.forEach((reserva: any) => {
         const key = `row${reserva.numeroFila}col${reserva.numeroColumna}`;
         if (state.seats[key]) {
-          state.seats[key].color = reservedColor;
+          if (reserva.usuarioID === usuarioID) {
+            state.seats[key].color = userReservedColor;
+          } else {
+            state.seats[key].color = reservedColor;
+          }
         }
       });
     };
