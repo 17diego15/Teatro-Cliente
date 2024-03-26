@@ -71,7 +71,9 @@ export default defineComponent({
     };
 
     const comprarAsientos = () => {
-      state.mostrarFormularioPago = true;
+      if (state.reservasParaEnviar.length > 0) {
+        state.mostrarFormularioPago = true;
+      }
     };
 
     const finalizarCompra = async () => {
