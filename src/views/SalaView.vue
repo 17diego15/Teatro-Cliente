@@ -81,17 +81,19 @@ export default defineComponent({
       try {
         const usuarioData = localStorage.getItem('usuario');
         const usuarioID = usuarioData ? JSON.parse(usuarioData).usuarioID : null;
-        await seatsStore.comprarAsientos(state.reservasParaEnviar, usuarioID);
         const funcionID = Number(route.params.id);
-        await seatsStore.enviarPedido(usuarioID, funcionID, state.reservasParaEnviar);
 
-        cerrarModal();
-        state.mostrarFormularioPago = false;
-        router.push('/');
+        const pedidoCreado = await seatsStore.enviarPedido(usuarioID, funcionID, state.reservasParaEnviar);
+        if (pedidoCreado) {
+          await seatsStore.comprarAsientos(state.reservasParaEnviar, usuarioID, pedidoCreado);
+          cerrarModal();
+          router.push('/');
+        } else {
+          console.error('No se pudo crear el pedido correctamente.');
+        }
       } catch (error) {
-        console.error('Error al realizar las reservas: ', error);
+        console.error('Error durante el proceso de finalización de la compra: ', error);
       }
-      state.mostrarFormularioPago = false;
     };
 
     const inicializarAsientos = () => {
@@ -133,7 +135,7 @@ export default defineComponent({
     const toggleSeatColor = ({ row, col }: { row: number; col: number }) => {
       const key = `row${row}col${col}`;
       if (state.seats[key]) {
-        if (state.seats[key].color === reservedColor) {
+        if (state.seats[key].color === reservedColor || state.seats[key].color === userReservedColor) {
           alert('Este asiento ya está ocupado.');
         } else {
           state.seats[key].color = state.seats[key].color === defaultColor ? selectedColor : defaultColor;
@@ -148,6 +150,7 @@ export default defineComponent({
         }
       }
     };
+
     onMounted(async () => {
       await cargarSala();
       await cargarReservas();

@@ -44,15 +44,17 @@ export const useSeatsStore = defineStore('seats', {
         console.error('Error al obtener las reservas', error);
       }
     },
-    async comprarAsientos(reservasParaEnviar: AsientoSeleccionado[], usuarioID: number) {
+    async comprarAsientos(reservasParaEnviar: AsientoSeleccionado[], usuarioID: number, pedidoID: number) {
       try {
-        const response = await axios.post('/api/reserva', reservasParaEnviar.map(reserva => ({
-          reservaID: 0,
+        const reservasConPedidoID = reservasParaEnviar.map(reserva => ({
           funcionID: reserva.funcionID,
           numeroFila: reserva.numeroFila,
           numeroColumna: reserva.numeroColumna,
           usuarioID,
-        })));
+          pedidoID,
+        }));
+
+        const response = await axios.post('/api/reserva', reservasConPedidoID);
         return response.data;
       } catch (error) {
         console.error('Error al realizar las reservas', error);
@@ -62,20 +64,23 @@ export const useSeatsStore = defineStore('seats', {
     async enviarPedido(usuarioID: number, funcionID: number, asientosSeleccionados: AsientoSeleccionado[]) {
       try {
         const funcionInfo = await axios.get(`/api/funcion/${funcionID}`);
-        const precioPorAsiento = funcionInfo.data.obra.precio; 
+        const precioPorAsiento = funcionInfo.data.obra.precio;
         const precioTotal = asientosSeleccionados.length * precioPorAsiento;
-        const numeroDeReservas = asientosSeleccionados.length;
-        const fecha = new Date().toISOString(); 
+        const fecha = new Date().toISOString();
         const pedido = {
           usuarioID,
           funcionID,
           precio: precioPorAsiento,
           precioTotal,
           fecha,
-          numeroDeReservas,
+          numeroDeReservas: asientosSeleccionados.length,
         };
         const response = await axios.post('/api/pedido', pedido);
-        return response.data;
+        if (response.data && response.data.pedidoID) {
+          return response.data.pedidoID;
+        } else {
+          throw new Error('Pedido creado, pero no se recibió un pedidoID válido.');
+        }
       } catch (error) {
         console.error('Error al enviar el pedido', error);
         throw error;
