@@ -16,13 +16,10 @@ export const usePedidosStore = defineStore('pedidos', {
         pedidos: [] as Pedido[],
     }),
     actions: {
-        async cargarPedidos() {
+        async cargarPedidos(usuarioID: number) {
             try {
-                const usuarioData = JSON.parse(localStorage.getItem('usuario') || '{}');
-                const usuarioId = usuarioData.usuarioID;
-
-                if (usuarioId) {
-                    const response = await axios.get(`/api/pedido?usuarioID=${usuarioId}`);
+                if (usuarioID) {
+                    const response = await axios.get(`/api/pedido?usuarioID=${usuarioID}`);
                     this.pedidos = response.data;
                 } else {
                     console.error('usuarioID no está definido');
