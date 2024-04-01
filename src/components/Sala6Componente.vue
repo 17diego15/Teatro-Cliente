@@ -23,7 +23,12 @@ export default defineComponent({
 </script>
 
 <template>
-    <svg width="40%" viewBox="-40 0 200 120" class="sala_svg" preserveAspectRatio="xMidYMid meet">
+    <svg width="35rem" height="5rem" viewBox="0 0 130 20" preserveAspectRatio="xMidYMid meet">
+        <rect x="0" y="0" width="130" height="20" fill="#9dacbb" />
+        <text x="65" y="12" fill="black" font-size="5" text-anchor="middle">Pantalla</text>
+    </svg>
+
+    <svg width="30rem" viewBox="0 0 130 120" class="sala_svg" preserveAspectRatio="xMidYMid meet">
         <g v-for="row in rows" :key="row">
             <g v-for="col in getColsForRow(row)" :key="col">
                 <rect :x="col * 10 - 10" :y="row * 10 - 10" width="9" height="9" :fill="getSeatColor({ row, col })"
