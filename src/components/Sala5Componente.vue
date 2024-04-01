@@ -18,6 +18,16 @@ export default defineComponent({
             type: Function as PropType<(seat: { row: number; col: number }) => void>,
             required: true
         },
+    },
+    data() {
+        return {
+            colorDescription: {
+                'Sitio para elegir': '#ffffff',
+                'Sitio escogido por el usuario': '#00ff4c',
+                'Sitio ocupado': '#ff0000',
+                'Sitio ocupado por usuario': '#0000ff',
+            }
+        };
     }
 });
 </script>
@@ -40,4 +50,14 @@ export default defineComponent({
             </g>
         </g>
     </svg>
+
+    <div class="legend" style="margin-top: 1rem; display: flex; justify-content: center; align-items: center;">
+        <div v-for="(color, description) in colorDescription" :key="description"
+            style="display: flex; align-items: center; margin-right: 2rem;">
+            <svg width="20" height="20">
+                <rect width="20" height="20" :fill="color" />
+            </svg>
+            <span style="margin-left: 0.5rem;">{{ description }}</span>
+        </div>
+    </div>
 </template>
