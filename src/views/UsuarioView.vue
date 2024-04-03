@@ -2,8 +2,8 @@
 import { ref, onMounted } from 'vue';
 import { useAuthStore } from '@/store/LoginStore';
 import { usePedidosStore } from '@/store/PedidosStore';
+import { useFuncionesStore } from '@/store/FuncionesStore';
 import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 
 interface Reserva {
     reservaID: number;
@@ -27,35 +27,75 @@ interface Pedido {
 
 const authStore = useAuthStore();
 const pedidosStore = usePedidosStore();
+const funcionesStore = useFuncionesStore();
 
 onMounted(async () => {
     if (authStore.usuario && authStore.usuario.usuarioID) {
         await pedidosStore.cargarPedidos(authStore.usuario.usuarioID);
+        await funcionesStore.cargarFunciones();
     }
 });
 
-const descargarComoPDF = async (pedido: Pedido) => {
-    const element = document.createElement('div');
-    element.innerHTML = `
-    <h1>Pedido #${pedido.pedidoID}</h1>
-    <p>Fecha: ${pedido.fecha}</p>
-    <p>Precio Total: ${pedido.precioTotal}€</p>
-    <ul>${pedido.reservas.map(r => `<li>Fila: ${r.numeroFila}, Asiento: ${r.numeroColumna}</li>`).join('')}</ul>`;
+function descargarComoPDF(pedido: any) {
+    const funcionDelPedido = funcionesStore.funciones.find(f => f.funcionID === pedido.funcionID);
+    if (!funcionDelPedido) {
+        console.error('Función no encontrada para el pedido:', pedido.funcionID);
+        alert('No se pudo encontrar la información de la función para este pedido.');
+        return;
+    }
 
-    document.body.appendChild(element);
+    const fechaPedido = new Date(pedido.fecha);
+    const fechaFuncion = new Date(funcionDelPedido.fecha);
+    const anchoDocumento = 3.5 * 72;
+    const alturaLinea = 20; 
+    const lineasExtras = 9; 
+    const margenSuperiorInferior = 40; 
+    const alturaContenido = (pedido.reservas.length * alturaLinea) + (lineasExtras * alturaLinea);
+    const alturaDocumento = margenSuperiorInferior + alturaContenido;
 
-    const canvas = await html2canvas(element);
-    const imgData = canvas.toDataURL('image/png');
-    const pdf = new jsPDF();
-    const imgProps = pdf.getImageProperties(imgData);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'pt',
+        format: [anchoDocumento, alturaDocumento] 
+    });
 
-    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-    pdf.save(`pedido_${pedido.pedidoID}.pdf`);
+    const colorPrincipal = "#000";
+    const colorSecundario = "#700";
+    doc.setTextColor(colorPrincipal);
+    doc.setFont('times', 'bold');
+    doc.setFontSize(14);
+    doc.text("Ticketon", 14, 22);
 
-    document.body.removeChild(element);
-};
+    doc.setFont('times', 'normal');
+    doc.setFontSize(12); 
+
+    let startY = 34;
+    doc.text(`Fecha del Pedido: ${fechaPedido.toLocaleDateString("es-ES", { day: '2-digit', month: '2-digit', year: 'numeric' })}`, 14, startY);
+    startY += alturaLinea;
+    doc.text(`Obra: ${funcionDelPedido.obra.titulo}`, 14, startY);
+    startY += alturaLinea;
+    doc.text(`Sala: ${funcionDelPedido.salaID}`, 14, startY);
+    startY += alturaLinea;
+    doc.text(`Fecha de la Función: ${fechaFuncion.toLocaleDateString("es-ES", { day: '2-digit', month: '2-digit', year: 'numeric' })}`, 14, startY);
+    startY += alturaLinea;
+    doc.text(`Hora: ${funcionDelPedido.hora}`, 14, startY);
+    startY += alturaLinea;
+    doc.text(`Precio por asiento: ${funcionDelPedido.obra.precio}`, 14, startY);
+    startY += alturaLinea;
+    doc.text(`Asientos:`, 14, startY);
+    startY += alturaLinea;
+
+    pedido.reservas.forEach((r: Reserva) => {
+        doc.text(`- Fila: ${r.numeroFila}, Asiento: ${r.numeroColumna}`, 18, startY);
+        startY += alturaLinea;
+    });
+
+    doc.setFont('times', 'bold');
+    doc.setTextColor(colorSecundario);
+    doc.text(`Total: ${pedido.precioTotal} €`, 14, startY);
+
+    doc.save(`pedido_${pedido.pedidoID}.pdf`);
+}
 
 </script>
 

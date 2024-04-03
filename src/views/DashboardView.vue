@@ -408,7 +408,7 @@ export default defineComponent({
   <div class="dashboard_container">
     <div class="dashboard_menu_izquierda">
       <p @click="mostrarObras">Obras</p>
-      <p @click="crearObra">Añadir Obra</p>
+      <!-- <p @click="crearObra">Añadir Obra</p> -->
       <p @click="mostrarFunciones">Funciones</p>
       <p @click="crearFuncion">Añadir funcion</p>
       <p @click="mostrarUsuarios">Usuarios</p>
@@ -449,6 +449,7 @@ export default defineComponent({
       </div>
 
       <div v-else-if="seccionActiva === 'obras'">
+        <button @click="crearObra" class="btn btn-primary">Añadir Nueva Obra</button>
         <div class="dashboard_contenido_obras">
           <div class="dashboard_item dashboard_encabezado">
             <div>Id</div>

@@ -5,6 +5,7 @@ interface Obra {
   obraID: number;
   titulo: string;
   imagen: string;
+  precio: string;
 }
 
 interface Funcion {
