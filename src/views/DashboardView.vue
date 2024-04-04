@@ -410,12 +410,12 @@ export default defineComponent({
       <p @click="mostrarObras">Obras</p>
       <!-- <p @click="crearObra">Añadir Obra</p> -->
       <p @click="mostrarFunciones">Funciones</p>
-      <p @click="crearFuncion">Añadir funcion</p>
+      <!-- <p @click="crearFuncion">Añadir funcion</p> -->
       <p @click="mostrarUsuarios">Usuarios</p>
       <p @click="mostrarActores">Actores</p>
-      <p @click="crearActor">Añadir actor</p>
+      <!-- <p @click="crearActor">Añadir actor</p> -->
       <p @click="mostrarSalas">Salas</p>
-      <p @click="crearSala">Añadir sala</p>
+      <!-- <p @click="crearSala">Añadir sala</p> -->
 
     </div>
     <div class="dashboard_menu_derecha">
@@ -449,7 +449,7 @@ export default defineComponent({
       </div>
 
       <div v-else-if="seccionActiva === 'obras'">
-        <button @click="crearObra" class="btn btn-primary">Añadir Nueva Obra</button>
+        <button @click="crearObra" class="dashboard_boton">Añadir Nueva Obra</button>
         <div class="dashboard_contenido_obras">
           <div class="dashboard_item dashboard_encabezado">
             <div>Id</div>
@@ -504,6 +504,8 @@ export default defineComponent({
       </div>
 
       <div v-if="seccionActiva === 'funciones' && !mostrandoFormularioEdicion">
+        <button @click="crearFuncion" class="dashboard_boton">Añadir Nueva Funcion</button>
+
         <div class="dashboard_contenido_funciones">
           <div class="dashboard_item dashboard_encabezado">
             <div>Id Funcion</div>
@@ -578,6 +580,7 @@ export default defineComponent({
       </div>
 
       <div v-if="seccionActiva === 'actores' && !mostrandoFormularioEdicion">
+        <button @click="crearActor" class="dashboard_boton">Añadir Nueva Actor</button>
         <div class="dashboard_contenido_actores">
           <div class="dashboard_item dashboard_encabezado">
             <div>Id Actor</div>
@@ -618,8 +621,6 @@ export default defineComponent({
       <div v-if="seccionActiva === 'salas' && mostrandoFormularioEdicion && salaAEditar">
         <form @submit.prevent="enviarEdicionSala" class="dashboard_menu_container">
           <div class="dashboard_put">
-            <label for="salaID">Sala Id:</label>
-            <input id="salaID" type="text" v-model="salaAEditar.salaID" placeholder="Id sala">
             <label for="nombre">Nombre sala:</label>
             <input id="nombre" type="text" v-model="salaAEditar.nombre" placeholder="Nombre">
             <label for="numeroFilas">Filas:</label>
@@ -635,6 +636,7 @@ export default defineComponent({
       </div>
 
       <div v-if="seccionActiva === 'salas' && !mostrandoFormularioEdicion">
+        <button @click="crearSala" class="dashboard_boton">Añadir Nueva Sala</button>
         <div class="dashboard_contenido_funciones">
           <div class="dashboard_item dashboard_encabezado">
             <div>Id Sala</div>

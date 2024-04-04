@@ -713,6 +713,21 @@
   text-align: center;
 }
 
+.dashboard_boton{
+  background-color: var(--botonTransparente);
+  color: var(--blanco);
+  border-color: var(--blanco);
+  border-width: 1px;
+  border-style: solid;
+  width: 13rem;
+  height: 2.5rem;
+  cursor: pointer;
+}
+
+.dashboard_boton:hover{
+  background-color: var(--botonActivo);
+  border: none;
+}
 /*register*/
 
 .register_container {
