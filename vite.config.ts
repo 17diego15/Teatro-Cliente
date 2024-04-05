@@ -15,7 +15,7 @@ export default defineConfig({
   },server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:8001', 
+        target: 'http://a2be0c14db8ce4a91900b9e17cea92a6-1532791566.us-east-1.elb.amazonaws.com', 
         changeOrigin: true, 
         rewrite: path => path.replace(/^\/api/, ''), 
       },
