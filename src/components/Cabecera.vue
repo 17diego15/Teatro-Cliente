@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
 import { useAuthStore } from '@/store/LoginStore';
+import LogoCanvas from '@/components/LogoComponente.vue'; 
 
 const authStore = useAuthStore();
 
@@ -12,7 +13,7 @@ function actualizarNombreUsuario() {
 <template>
   <div class="header">
     <div class="header_izq">
-      <img src="../assets/logo.png" alt="logo">
+      <LogoCanvas /> 
     </div>
     <div class="header_dcha">
       <nav>
