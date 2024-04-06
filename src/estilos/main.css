@@ -404,8 +404,11 @@
 
 @media(max-width: 700px) {
   .cartelera_div_img {
-    gap: 2rem;
     width: calc(100% - 1rem);
+  }
+  .cartelera_section{
+    padding: 2rem;
+    justify-content: center;
   }
 }
 
@@ -490,6 +493,23 @@
 .infoObras_section_boton button:hover {
   background-color: var(--botonActivo);
   border: 0;
+}
+
+@media(max-width: 1000px) {
+.infoObras_section_div{
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.infoObras_section_boton{
+  padding-top: 0rem;
+}
+
+.infoObras_section_central {
+  text-align: center;
+  width: 50%;
+}
+
 }
 
 /* 404 */
