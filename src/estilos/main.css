@@ -13,7 +13,7 @@
   --botonTransparente: rgba(13, 38, 61, 0.7);
   --titulo: #3198f7;
   --menuDashboard: #3f3f3f;
-  --menuDashboardselecion:#757575;
+  --menuDashboardselecion: #757575;
   --bordeInput: #007bff;
   --sombraBordeInput: rgba(0, 123, 255, 0.5);
 }
@@ -80,6 +80,46 @@
 .header_boton:hover {
   background-color: var(--botonActivo);
   border: 0;
+}
+
+@media(max-width: 1000px) {
+  .header_izq {
+    width: 20%;
+  }
+
+  .header_dcha {
+    width: 80%;
+  }
+}
+
+@media(max-width: 700px) {
+  .header {
+    flex-direction: column;
+    height: auto;
+    gap: 2rem;
+    padding: 2rem;
+  }
+
+  .header_izq {
+    width: auto;
+  }
+
+  .header_dcha {
+    width: auto;
+  }
+}
+
+@media(max-width: 600px) {
+
+  .header_dcha {
+    justify-content: center;
+  }
+
+  .header_dcha nav {
+    width: auto;
+    flex-direction: column;
+    gap: 2rem;
+  }
 }
 
 /* Footer */
@@ -287,6 +327,18 @@
   bottom: 5rem;
   left: 1.5rem;
   background-color: var(--botonTransparente);
+}
+
+@media(max-width: 1200px) {
+  .home_cartelera_div {
+    flex-direction: column;
+  }
+
+  .home_cartelera_div_boton {
+    justify-content: center;
+    margin-right: 0rem;
+  }
+
 }
 
 /*cartelera*/
@@ -555,7 +607,7 @@
   gap: 2rem;
 }
 
-.dashboard_menu_izquierda{
+.dashboard_menu_izquierda {
   width: 20%;
   background-color: var(--menuDashboard);
   display: flex;
@@ -571,39 +623,39 @@
 
 .dashboard_menu_izquierda p:hover {
   background-color: var(--menuDashboardselecion);
-  cursor: pointer; 
+  cursor: pointer;
 }
 
-.dashboard_menu_derecha{
+.dashboard_menu_derecha {
   width: 80%;
 }
 
 .dashboard_contenido_funciones {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr; 
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   gap: 1rem;
-  align-items: center; 
+  align-items: center;
 }
 
 .dashboard_contenido_obras {
   display: grid;
-  grid-template-columns: 0.5fr 0.5fr 0.5fr 0.5fr 1fr 0.5fr 0.5fr; 
+  grid-template-columns: 0.5fr 0.5fr 0.5fr 0.5fr 1fr 0.5fr 0.5fr;
   gap: 1rem;
-  align-items: center; 
+  align-items: center;
 }
 
-.dashboard_contenido_usuarios{
+.dashboard_contenido_usuarios {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr; 
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   gap: 1rem;
-  align-items: center; 
+  align-items: center;
 }
 
-.dashboard_contenido_actores{
+.dashboard_contenido_actores {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr; 
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 1rem;
-  align-items: center; 
+  align-items: center;
 }
 
 .dashboard_item {
@@ -612,24 +664,24 @@
 }
 
 .dashboard_contenido_tabla {
-  padding-left:30%;
+  padding-left: 30%;
 }
 
-.dashboard_iconos{
+.dashboard_iconos {
   display: flex;
   gap: 2rem;
 }
 
-.dashboard_iconos svg{
+.dashboard_iconos svg {
   height: 2rem;
   fill: var(--blanco);
 }
 
-.dashboard_iconos svg:hover{
+.dashboard_iconos svg:hover {
   fill: var(--botonActivo);
 }
 
-.dashboard_put{
+.dashboard_put {
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -637,13 +689,13 @@
   align-items: center;
 }
 
-.dashboard_menu_container{
+.dashboard_menu_container {
   display: flex;
   flex-direction: column;
   gap: 2rem;
 }
 
-.dashboard_put input{
+.dashboard_put input {
   width: 10rem;
   height: 2rem;
   border: 1px solid var(--blanco);
@@ -658,11 +710,11 @@
 }
 
 .dashboard_put input:focus {
-  border-color: var(--bordeInput); 
+  border-color: var(--bordeInput);
   box-shadow: 0 0 5px var(--sombraBordeInput);
 }
 
-.dashboard_put textarea{
+.dashboard_put textarea {
   width: 20rem;
   height: 20rem;
   border: 1px solid var(--blanco);
@@ -676,19 +728,20 @@
   color: var(--blanco);
 }
 
-.dashboard_botones{
+.dashboard_botones {
   display: flex;
   flex-direction: column;
   gap: 2rem;
   align-items: center;
 }
 
-.dashboard_put_actores{
+.dashboard_put_actores {
   display: flex;
   gap: 2rem;
 }
 
-.dashboard_put_actores button, .dashboard_botones button{
+.dashboard_put_actores button,
+.dashboard_botones button {
   background-color: var(--boton);
   color: var(--blanco);
   border-color: var(--blanco);
@@ -703,17 +756,17 @@
   text-decoration: none;
 }
 
-.dashboard_put_actores button:hover{
+.dashboard_put_actores button:hover {
   background-color: var(--botonActivo);
   border: none;
 }
 
 .dashboard_encabezado {
-  font-weight: bold; 
+  font-weight: bold;
   text-align: center;
 }
 
-.dashboard_boton{
+.dashboard_boton {
   background-color: var(--botonTransparente);
   color: var(--blanco);
   border-color: var(--blanco);
@@ -724,10 +777,11 @@
   cursor: pointer;
 }
 
-.dashboard_boton:hover{
+.dashboard_boton:hover {
   background-color: var(--botonActivo);
   border: none;
 }
+
 /*register*/
 
 .register_container {
@@ -788,12 +842,14 @@
   border: 0;
 }
 
-.register_formulario a, .register_cuenta {
+.register_formulario a,
+.register_cuenta {
   color: var(--blanco);
   text-decoration: none;
 }
 
-.register_formulario a:hover, .register_cuenta:hover {
+.register_formulario a:hover,
+.register_cuenta:hover {
   color: var(--botonActivo);
   text-decoration: underline;
 }
@@ -818,11 +874,11 @@
 
 .sala_svg {
   display: flex;
-  justify-content: center; 
-  align-items: center; 
+  justify-content: center;
+  align-items: center;
 }
 
-.sala_boton{
+.sala_boton {
   background-color: var(--boton);
   color: var(--blanco);
   border-color: var(--blanco);
@@ -833,12 +889,12 @@
   cursor: pointer;
 }
 
-.sala_boton:hover{
+.sala_boton:hover {
   background-color: var(--botonActivo);
   border: 0;
 }
 
-.sala_div{
+.sala_div {
   display: flex;
   flex-direction: row;
   gap: 2rem;
@@ -859,6 +915,7 @@
   align-items: center;
   gap: 2rem;
 }
+
 .infoPago_div1_divIzq h2 {
   color: var(--titulo);
 }
@@ -868,6 +925,7 @@
   gap: 2rem;
   align-items: center;
 }
+
 .infoPago_div1_divIzq_div div {
   display: flex;
   gap: 1rem;
@@ -912,9 +970,11 @@
   margin: auto;
   gap: 1rem;
 }
+
 .infoPago_tarjeta label {
   margin-top: 10px;
 }
+
 .infoPago_tarjeta input {
   margin-bottom: 10px;
   border: 1px solid var(--blanco);
@@ -930,6 +990,7 @@
   margin-bottom: 10px;
   gap: 2rem;
 }
+
 .infoPago_caducidadContainer input {
   width: 5.5rem;
   margin-right: 5px;
@@ -945,6 +1006,7 @@
   height: 2.5rem;
   cursor: pointer;
 }
+
 .infoPago_boton:hover {
   background-color: var(--botonActivo);
   border: 0;
@@ -980,7 +1042,7 @@
 
 /*pagina del usuario*/
 
-.usuario_container{
+.usuario_container {
   min-height: 100vh;
   justify-content: center;
   display: flex;
