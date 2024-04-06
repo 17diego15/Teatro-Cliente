@@ -820,7 +820,7 @@
   text-decoration: none;
 }
 
-.dashboard_put_actores button:hover {
+.dashboard_put_actores button:hover, .dashboard_botones button:hover {
   background-color: var(--botonActivo);
   border: none;
 }
@@ -1116,4 +1116,23 @@
   align-items: center;
   gap: 2rem;
   padding: 2rem;
+}
+
+.usuario_boton{
+  background-color: var(--boton);
+  color: var(--blanco);
+  border-color: var(--blanco);
+  border-width: 1px;
+  border-style: solid;
+  width: 10rem;
+  height: 2rem;
+  cursor: pointer;
+  align-items: center;
+  text-decoration: none;
+  margin: 1rem;
+}
+
+.usuario_boton:hover {
+  background-color: var(--botonActivo);
+  border: 0;
 }
