@@ -448,7 +448,7 @@ export default defineComponent({
         </form>
       </div>
 
-      <div v-else-if="seccionActiva === 'obras'">
+      <div class="dashboard_div_separacion" v-else-if="seccionActiva === 'obras'">
         <button @click="crearObra" class="dashboard_boton">Añadir Nueva Obra</button>
         <div class="dashboard_contenido_obras">
           <div class="dashboard_item dashboard_encabezado">
@@ -503,7 +503,7 @@ export default defineComponent({
         </form>
       </div>
 
-      <div v-if="seccionActiva === 'funciones' && !mostrandoFormularioEdicion">
+      <div class="dashboard_div_separacion" v-if="seccionActiva === 'funciones' && !mostrandoFormularioEdicion">
         <button @click="crearFuncion" class="dashboard_boton">Añadir Nueva Funcion</button>
 
         <div class="dashboard_contenido_funciones">
@@ -579,7 +579,7 @@ export default defineComponent({
         </div>
       </div>
 
-      <div v-if="seccionActiva === 'actores' && !mostrandoFormularioEdicion">
+      <div class="dashboard_div_separacion" v-if="seccionActiva === 'actores' && !mostrandoFormularioEdicion">
         <button @click="crearActor" class="dashboard_boton">Añadir Nueva Actor</button>
         <div class="dashboard_contenido_actores">
           <div class="dashboard_item dashboard_encabezado">
@@ -635,7 +635,7 @@ export default defineComponent({
         </form>
       </div>
 
-      <div v-if="seccionActiva === 'salas' && !mostrandoFormularioEdicion">
+      <div class="dashboard_div_separacion" v-if="seccionActiva === 'salas' && !mostrandoFormularioEdicion">
         <button @click="crearSala" class="dashboard_boton">Añadir Nueva Sala</button>
         <div class="dashboard_contenido_funciones">
           <div class="dashboard_item dashboard_encabezado">

@@ -685,6 +685,13 @@
 
 .dashboard_menu_derecha {
   width: 80%;
+  padding: 2rem;
+}
+
+.dashboard_div_separacion{
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
 .dashboard_contenido_funciones {
@@ -1082,7 +1089,7 @@
 }
 
 .modal-content {
-  background-color: #fff;
+  background-color: var(--boton);
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
