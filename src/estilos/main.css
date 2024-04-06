@@ -396,6 +396,19 @@
   background-color: var(--botonTransparente);
 }
 
+@media(max-width: 1200px) {
+  .cartelera_div_img {
+    width: calc(50% - 1rem);
+  }
+}
+
+@media(max-width: 700px) {
+  .cartelera_div_img {
+    gap: 2rem;
+    width: calc(100% - 1rem);
+  }
+}
+
 /*detalle obras*/
 
 .infoObras_sectionContainer {
