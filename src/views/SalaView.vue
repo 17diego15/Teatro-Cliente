@@ -44,7 +44,7 @@ export default defineComponent({
     const defaultColor = '#9dacbb';
     const selectedColor = '#00ff4c';
     const reservedColor = '#ff0000';
-    const userReservedColor = '#0000ff';
+    const userReservedColor = '#87ceeb';
 
     const volver = async () => {
       router.push("/cartelera")

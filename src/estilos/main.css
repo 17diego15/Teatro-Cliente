@@ -637,19 +637,19 @@
     flex-direction: column;
     margin-bottom: 20px;
     border: 2px solid var(--bordeTarjetaSala);
-    padding: 15px; 
-    box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+    padding: 15px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     background-color: var(--fondo);
-    color: var(--blanco); 
+    color: var(--blanco);
   }
 
-  .eleccionSala_texto{
+  .eleccionSala_texto {
     text-align: center;
   }
 }
 
 @media(max-width: 500px) {
-  .eleccionSala_container button{
+  .eleccionSala_container button {
     width: 7rem
   }
 }
@@ -688,7 +688,7 @@
   padding: 2rem;
 }
 
-.dashboard_div_separacion{
+.dashboard_div_separacion {
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -820,7 +820,8 @@
   text-decoration: none;
 }
 
-.dashboard_put_actores button:hover, .dashboard_botones button:hover {
+.dashboard_put_actores button:hover,
+.dashboard_botones button:hover {
   background-color: var(--botonActivo);
   border: none;
 }
@@ -940,6 +941,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 30rem;
+}
+
+.sala_pantalla {
+  width: 35rem;
+  height: 5rem;
 }
 
 .sala_boton {
@@ -1104,6 +1111,76 @@
   cursor: pointer;
 }
 
+.sala_leyenda {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60%;
+}
+
+.sala_leyenda div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 2rem;
+  width: 100%;
+}
+
+.sala_leyenda span {
+  margin-left: 0.5rem;
+}
+
+.sala_pantalla {
+  width: 30rem;
+}
+
+@media(max-width: 1200px) {
+  .sala_leyenda {
+    width: 80%;
+  }
+}
+
+@media(max-width: 1000px) {
+  .sala_leyenda {
+    width: 100%;
+  }
+
+
+  .sala_svg {
+    width: 20rem;
+  }
+
+  .sala_pantalla {
+    width: 25rem;
+    height: 5rem;
+  }
+}
+
+@media(max-width: 600px) {
+  .sala_svg {
+    width: 20rem;
+  }
+
+  .sala_pantalla {
+    width: 20rem;
+    height: 5rem;
+  }
+
+  .sala_leyenda{
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .sala_leyenda div{
+    padding-left: 30%;
+    justify-content: start;
+  }
+
+  .sala_boton{
+    width: 10rem;
+  }
+}
+
 /*pagina del usuario*/
 
 .usuario_container {
@@ -1118,7 +1195,7 @@
   padding: 2rem;
 }
 
-.usuario_boton{
+.usuario_boton {
   background-color: var(--boton);
   color: var(--blanco);
   border-color: var(--blanco);
