@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, type Ref, onBeforeUnmount } from 'vue';
-import logoSrc from '@/assets/logo.png'; // Importar la imagen correctamente
+import logoSrc from '@/assets/logo.png';
 
 const logoCanvas: Ref<HTMLCanvasElement | null> = ref(null);
 let frameId: number | null = null;
@@ -12,13 +12,13 @@ onMounted(() => {
     if (!ctx) return;
 
     const image = new Image();
-    image.src = logoSrc; // Usar la imagen importada
+    image.src = logoSrc; 
     image.onload = () => {
         let opacity = 1;
         let fadeIn = false;
 
         const draw = () => {
-            if (!canvas || !ctx) return; // Verificar que el canvas y el ctx existan
+            if (!canvas || !ctx) return; 
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.globalAlpha = opacity;
