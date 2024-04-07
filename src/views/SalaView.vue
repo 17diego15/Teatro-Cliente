@@ -1,198 +1,171 @@
 <script lang="ts">
-import { defineComponent, reactive, ref, onMounted } from 'vue';
+import { defineComponent, reactive, onMounted, toRefs, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import type { Ref } from 'vue';
-
-interface AsientoSeleccionado {
-  funcionID: number;
-  numeroFila: number;
-  numeroColumna: number;
-}
-
-
-interface Seat {
-  row: number;
-  col: number;
-  color: string;
-}
-
-interface Sala {
-  salaID: number;
-  nombre: string;
-  numeroFilas: number;
-  numeroColumnas: number;
-}
-
-interface Reserva {
-  reservaID: number;
-  funciónID: number;
-  numeroFila: number;
-  numeroColumna: number;
-  sala: Sala;
-}
+import { useSeatsStore } from '@/store/SalaStore';
+import Sala1 from '@/components/Sala1Componente.vue';
+import Sala2 from '@/components/Sala2Componente.vue';
+import Sala3 from '@/components/Sala3Componente.vue';
+import Sala4 from '@/components/Sala4Componente.vue';
+import Sala5 from '@/components/Sala5Componente.vue';
+import Sala6 from '@/components/Sala6Componente.vue';
+import FormularioPago from '@/components/FormularioPagoComponente.vue'
+import Sala from '@/components/SalaNombreComponente.vue';
 
 export default defineComponent({
   name: 'SeatMap',
+  components: {
+    Sala1,
+    Sala2,
+    Sala3,
+    Sala4,
+    Sala5,
+    Sala6,
+    Sala,
+    FormularioPago
+  },
   setup() {
-    const reservas = ref<Reserva[]>([]);
-    const sala = ref<Sala | null>(null);
     const router = useRouter();
     const route = useRoute();
-    const numeroFilas = ref<number>(0);
-    const numeroColumnas = ref<number>(0);
-    const nombreSala = ref<string>();
-    const rows: Ref<number[]> = ref([]);
-    const cols: Ref<number[]> = ref([]);
+    const seatsStore = useSeatsStore();
+    console.log(seatsStore)
+    const sala = computed(() => seatsStore.sala);
 
-    const reservasParaEnviar = ref<AsientoSeleccionado[]>([]);
-
-    const volver = async () => { 
-      router.push("/cartelera")
-    }
-    const cargarReservas = async () => {
-      try {
-        const id = Number(route.params.id);
-        const respuesta = await fetch(`/api/funcion/${id}/reservas`);
-
-        if (!respuesta.ok) {
-          throw new Error('Error al obtener las reservas');
-        }
-
-        const data: Reserva[] = await respuesta.json();
-        reservas.value = data;
-        actualizarAsientosReservados();
-
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    const cargarSala = async () => {
-      try {
-        const id = Number(route.params.id);
-        const respuesta = await fetch(`/api/Funcion/${id}`);
-
-        if (!respuesta.ok) {
-          throw new Error('Error al obtener los detalles de la sala');
-        }
-
-        const data = await respuesta.json();
-        sala.value = data.sala;
-        nombreSala.value = data.sala?.nombre;
-        numeroFilas.value = data.sala?.numeroFilas || 0;
-        numeroColumnas.value = data.sala?.numeroColumnas || 0;
-
-        inicializarAsientos();
-
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    const comprarAsientos = async () => {
-      const reservasAjustadas = reservasParaEnviar.value.map(reserva => ({
-        reservaID: 0, 
-        funcionID: reserva.funcionID,
-        numeroFila: reserva.numeroFila,
-        numeroColumna: reserva.numeroColumna >= 7 && reserva.numeroFila >= 4 ? reserva.numeroColumna - 1 : reserva.numeroColumna,
-      }));
-
-      try {
-        const respuesta = await fetch('/api/reserva', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(reservasAjustadas), 
-        });
-
-        if (!respuesta.ok) {
-          throw new Error('Error al realizar las reservas');
-        }
-        router.push('/')
-      } catch (error) {
-        console.error('Error al realizar las reservas: ', error);
-      }
-    };
-    
-    onMounted(() => {
-      cargarSala().then(() => {
-        cargarReservas();
-      });
+    const state = reactive({
+      nombreSala: '',
+      numeroFilas: 0,
+      numeroColumnas: 0,
+      rows: [] as number[],
+      cols: [] as number[],
+      seats: {} as Record<string, { row: number; col: number; color: string; }>,
+      reservasParaEnviar: [] as { funcionID: number; numeroFila: number; numeroColumna: number; }[],
+      mostrarFormularioPago: false,
     });
 
     const defaultColor = '#9dacbb';
     const selectedColor = '#00ff4c';
     const reservedColor = '#ff0000';
+    const userReservedColor = '#87ceeb';
 
-    const seats = reactive<Record<string, Seat>>({});
+    const volver = async () => {
+      router.push("/cartelera")
+    }
+
+    const cerrarModal = () => {
+      state.mostrarFormularioPago = false;
+    };
+
+    const cargarSala = async () => {
+      const id = Number(route.params.id);
+      await seatsStore.cargarSala(id);
+      if (seatsStore.sala) {
+        state.nombreSala = seatsStore.sala.nombre;
+        state.numeroFilas = seatsStore.sala.numeroFilas;
+        state.numeroColumnas = seatsStore.sala.numeroColumnas;
+        inicializarAsientos();
+      }
+    };
+
+    const cargarReservas = async () => {
+      const id = Number(route.params.id);
+      await seatsStore.cargarReservas(id);
+      actualizarAsientosReservados();
+    };
+
+    const comprarAsientos = () => {
+      if (state.reservasParaEnviar.length > 0) {
+        state.mostrarFormularioPago = true;
+      }
+    };
+
+    const finalizarCompra = async () => {
+      try {
+        const usuarioData = localStorage.getItem('usuario');
+        const usuarioID = usuarioData ? JSON.parse(usuarioData).usuarioID : null;
+        const funcionID = Number(route.params.id);
+
+        const pedidoCreado = await seatsStore.enviarPedido(usuarioID, funcionID, state.reservasParaEnviar);
+        if (pedidoCreado) {
+          await seatsStore.comprarAsientos(state.reservasParaEnviar, usuarioID, pedidoCreado);
+          cerrarModal();
+          router.push('/');
+        } else {
+          console.error('No se pudo crear el pedido correctamente.');
+        }
+      } catch (error) {
+        console.error('Error durante el proceso de finalización de la compra: ', error);
+      }
+    };
 
     const inicializarAsientos = () => {
-      rows.value = Array.from({ length: numeroFilas.value }, (_, i) => i + 1);
-      cols.value = Array.from({ length: numeroColumnas.value }, (_, i) => i + 1);
-
-      rows.value.forEach((row: number) => {
-        cols.value.forEach((col: number) => {
-          if (!(row >= 4 && col === 7)) {
-            const key = `row${row}col${col}`;
-            seats[key] = { row, col, color: defaultColor };
-          }
+      state.rows = Array.from({ length: state.numeroFilas }, (_, i) => i + 1);
+      state.cols = Array.from({ length: state.numeroColumnas }, (_, i) => i + 1);
+      state.rows.forEach(row => {
+        state.cols.forEach(col => {
+          const key = `row${row}col${col}`;
+          state.seats[key] = { row, col, color: defaultColor };
         });
       });
     };
 
-
     const actualizarAsientosReservados = () => {
-      reservas.value.forEach((reserva) => {
-        let adjustedCol = reserva.numeroColumna;
-        if (reserva.numeroFila >= 4 && reserva.numeroColumna >= 7) {
-          adjustedCol += 1;
-        }
-        const key = `row${reserva.numeroFila}col${adjustedCol}`;
-        if (seats[key]) {
-          seats[key].color = reservedColor;
+      const usuarioData = localStorage.getItem('usuario');
+      const usuarioID = usuarioData ? JSON.parse(usuarioData).usuarioID : null;
+
+      seatsStore.reservas.forEach((reserva: any) => {
+        const key = `row${reserva.numeroFila}col${reserva.numeroColumna}`;
+        if (state.seats[key]) {
+          if (reserva.usuarioID === usuarioID) {
+            state.seats[key].color = userReservedColor;
+          } else {
+            state.seats[key].color = reservedColor;
+          }
         }
       });
     };
 
     const getColsForRow = (row: number) => {
-      return row >= 4 ? cols.value.filter((col: number) => col !== 7) : cols.value;
+      return row >= 4 ? state.cols.filter(col => col !== 7) : state.cols;
     };
 
-    const getSeatColor = ({ row, col }: { row: number; col: number }): string => {
+    const getSeatColor = ({ row, col }: { row: number; col: number }) => {
       const key = `row${row}col${col}`;
-      return seats[key] ? seats[key].color : '';
+      return state.seats[key] ? state.seats[key].color : '';
     };
 
-    const toggleSeatColor = ({ row, col }: { row: number; col: number }): void => {
+    const toggleSeatColor = ({ row, col }: { row: number; col: number }) => {
       const key = `row${row}col${col}`;
-      if (seats[key]) {
-        if (seats[key].color === reservedColor) {
+      if (state.seats[key]) {
+        if (state.seats[key].color === reservedColor || state.seats[key].color === userReservedColor) {
           alert('Este asiento ya está ocupado.');
         } else {
-          if (seats[key].color === defaultColor) {
-            seats[key].color = selectedColor;
-            const id = Number(route.params.id);
-            reservasParaEnviar.value.push({ numeroFila: row, numeroColumna: col, funcionID: id });
+          state.seats[key].color = state.seats[key].color === defaultColor ? selectedColor : defaultColor;
+          const id = Number(route.params.id);
+          const index = state.reservasParaEnviar.findIndex(s => s.numeroFila === row && s.numeroColumna === col);
+          if (index !== -1) {
+            state.reservasParaEnviar.splice(index,
+              1);
           } else {
-            seats[key].color = defaultColor;
-            const index = reservasParaEnviar.value.findIndex(s => s.numeroFila === row && s.numeroColumna === col);
-            if (index !== -1) {
-              reservasParaEnviar.value.splice(index, 1);
-            }
+            state.reservasParaEnviar.push({ funcionID: id, numeroFila: row, numeroColumna: col });
           }
         }
       }
     };
 
+    onMounted(async () => {
+      await cargarSala();
+      await cargarReservas();
+      console.log(seatsStore.sala);
+    });
     return {
-      sala,
-      rows,
+      ...toRefs(state),
       getColsForRow,
       getSeatColor,
       toggleSeatColor,
       comprarAsientos,
-      volver
+      volver,
+      sala,
+      finalizarCompra,
+      cerrarModal,
     };
   },
 });
@@ -200,18 +173,28 @@ export default defineComponent({
 
 <template>
   <div class="sala_container">
-    <h2>Bienvenido a la {{ sala?.nombre }}</h2>
-    <h2>Haz click en donde te quieres sentar</h2>
-    <svg width="30%" viewBox="0 0 200 120" class="sala_svg" preserveAspectRatio="xMidYMid meet">
-      <g v-for="row in rows" :key="row">
-        <rect v-for="col in getColsForRow(row)" :key="col" :x="col * 10 - 10" :y="row * 10 - 10" width="9" height="9"
-          :fill="getSeatColor({ row, col })" @click="toggleSeatColor({ row, col })" />
-      </g>
-    </svg>
+    <Sala :nombreSala="sala?.nombre" />
+    <Sala1 v-if="sala?.salaID === 1" :rows="rows" :getColsForRow="getColsForRow" :getSeatColor="getSeatColor"
+      :toggleSeatColor="toggleSeatColor" />
+    <Sala2 v-else-if="sala?.salaID === 2" :rows="rows" :getColsForRow="getColsForRow" :getSeatColor="getSeatColor"
+      :toggleSeatColor="toggleSeatColor" />
+    <Sala3 v-else-if="sala?.salaID === 3" :rows="rows" :getColsForRow="getColsForRow" :getSeatColor="getSeatColor"
+      :toggleSeatColor="toggleSeatColor" />
+    <Sala4 v-else-if="sala?.salaID === 4" :rows="rows" :getColsForRow="getColsForRow" :getSeatColor="getSeatColor"
+      :toggleSeatColor="toggleSeatColor" />
+    <Sala5 v-else-if="sala?.salaID === 5" :rows="rows" :getColsForRow="getColsForRow" :getSeatColor="getSeatColor"
+      :toggleSeatColor="toggleSeatColor" />
+    <Sala6 v-else-if="sala?.salaID === 6" :rows="rows" :getColsForRow="getColsForRow" :getSeatColor="getSeatColor"
+      :toggleSeatColor="toggleSeatColor" />
+    <div v-if="mostrarFormularioPago" class="modal" @click.self="cerrarModal">
+      <div class="modal-content">
+        <span class="close-modal" @click="cerrarModal">&times;</span>
+        <FormularioPago @onSubmitSuccess="finalizarCompra" />
+      </div>
+    </div>
     <div class="sala_div">
       <button class="sala_boton" @click="comprarAsientos">Comprar</button>
       <button class="sala_boton" @click="volver">Volver</button>
     </div>
-
   </div>
 </template>

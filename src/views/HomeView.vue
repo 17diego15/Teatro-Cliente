@@ -1,17 +1,19 @@
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue';
-import { RouterLink } from 'vue-router'
-
-import imagen1 from '../assets/slider1.jpg';
-import imagen2 from '../assets/slider2.jpg';
-import router from '@/router';
-
+import { defineComponent, onMounted, ref, computed } from 'vue';
+import { RouterLink, useRouter } from 'vue-router';
+import ObrasRecientesComponent from '@/components/HomeComponente.vue';
+import { useObrasStore } from '@/store/ObrasStore';
 
 export default defineComponent({
-    name: 'SliderComponent',
+    name: 'HomeView',
+    components: {
+        ObrasRecientesComponent,
+        RouterLink, 
+    },
     setup() {
+        const obrasStore = useObrasStore();
+        const router = useRouter();
         const slider = ref<HTMLElement | null>(null);
-        const obrasAleatorias = ref<Array<{ id: number; imagen: string }>>([]);
         let isTransitioning = false;
 
         const nextSlide = () => {
@@ -49,23 +51,20 @@ export default defineComponent({
                 }, 0);
             }
         };
-
-        obrasAleatorias.value = [
-            { id: 1, imagen: imagen1 },
-            { id: 2, imagen: imagen2 },
-            { id: 3, imagen: imagen2 },
-        ];
-
-        //cambiar cuando tenga las rutas bien
         const irAInfoObra = (id: number) => {
             router.push(`/obra/${id}`);
         };
 
-        onMounted(() => {
+        onMounted(async () => {
+            if (obrasStore.obras.length === 0) {
+                await obrasStore.cargarObras();
+            }
             setInterval(nextSlide, 5000);
         });
 
-        return { prevSlide, nextSlide, slider, obrasAleatorias, irAInfoObra };
+        const obrasRecientes = computed(() => obrasStore.obras.sort((a, b) => b.obraID - a.obraID).slice(0, 3));
+
+        return { prevSlide, nextSlide, slider, irAInfoObra, obrasRecientes };
     },
 });
 </script>
@@ -92,14 +91,10 @@ export default defineComponent({
         </div>
         <div class="home_cartelera">
             <div class="home_cartelera_div_boton">
-                <RouterLink to="/cartelera" class="home_cartelera_boton1" id="botonCartelera">Ver toda la cartelera</RouterLink>
+                <RouterLink to="/cartelera" class="home_cartelera_boton1" id="botonCartelera">Ver toda la cartelera
+                </RouterLink>
             </div>
-            <div class="home_cartelera_div" id="obrasContainer">
-                <div v-for="obra in obrasAleatorias" :key="obra.id" class="home_cartelera_div_img">
-                    <img :src="obra.imagen" alt="Imagen de obra">
-                    <button class="home_cartelera_boton1" @click="irAInfoObra(obra.id)">Comprar</button>
-                </div>
-            </div>
+            <ObrasRecientesComponent :obrasRecientes="obrasRecientes" @comprar="irAInfoObra" />
         </div>
     </section>
 </template>

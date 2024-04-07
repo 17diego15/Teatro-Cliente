@@ -18,13 +18,13 @@ export default {
 
 <template>
   <header>
-    <Cabecera :nombre-usuario="nombreUsuario" @logout="nombreUsuario = ''" />
+    <Cabecera />
       <!-- <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
       </nav> -->
   </header>
 
-  <router-view @usuario-logueado="nombreUsuario = $event" />
+  <router-view />
   <Pie />
 </template>
