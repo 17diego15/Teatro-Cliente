@@ -19,7 +19,7 @@ export const usePedidosStore = defineStore('pedidos', {
         async cargarPedidos(usuarioID: number) {
             try {
                 if (usuarioID) {
-                    const response = await axios.get(`/api/pedido?usuarioID=${usuarioID}`);
+                    const response = await axios.get(`http://a2be0c14db8ce4a91900b9e17cea92a6-1532791566.us-east-1.elb.amazonaws.com/pedido?usuarioID=${usuarioID}`);
                     this.pedidos = response.data;
                 } else {
                     console.error('usuarioID no está definido');

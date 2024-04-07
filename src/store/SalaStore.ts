@@ -30,7 +30,7 @@ export const useSeatsStore = defineStore('seats', {
   actions: {
     async cargarSala(funcionID: number) {
       try {
-        const response = await axios.get(`/api/Funcion/${funcionID}`);
+        const response = await axios.get(`http://a2be0c14db8ce4a91900b9e17cea92a6-1532791566.us-east-1.elb.amazonaws.com/Funcion/${funcionID}`);
         this.sala = response.data.sala;
       } catch (error) {
         console.error('Error al obtener los detalles de la sala', error);
@@ -38,7 +38,7 @@ export const useSeatsStore = defineStore('seats', {
     },
     async cargarReservas(funcionID: number) {
       try {
-        const response = await axios.get(`/api/reserva?funcionID=${funcionID}`);
+        const response = await axios.get(`http://a2be0c14db8ce4a91900b9e17cea92a6-1532791566.us-east-1.elb.amazonaws.com/reserva?funcionID=${funcionID}`);
         this.reservas = response.data;
       } catch (error) {
         console.error('Error al obtener las reservas', error);
@@ -54,7 +54,7 @@ export const useSeatsStore = defineStore('seats', {
           pedidoID,
         }));
 
-        const response = await axios.post('/api/reserva', reservasConPedidoID);
+        const response = await axios.post('http://a2be0c14db8ce4a91900b9e17cea92a6-1532791566.us-east-1.elb.amazonaws.com/reserva', reservasConPedidoID);
         return response.data;
       } catch (error) {
         console.error('Error al realizar las reservas', error);
@@ -63,7 +63,7 @@ export const useSeatsStore = defineStore('seats', {
     },
     async enviarPedido(usuarioID: number, funcionID: number, asientosSeleccionados: AsientoSeleccionado[]) {
       try {
-        const funcionInfo = await axios.get(`/api/funcion/${funcionID}`);
+        const funcionInfo = await axios.get(`http://a2be0c14db8ce4a91900b9e17cea92a6-1532791566.us-east-1.elb.amazonaws.com/funcion/${funcionID}`);
         const precioPorAsiento = funcionInfo.data.obra.precio;
         const precioTotal = asientosSeleccionados.length * precioPorAsiento;
         const fecha = new Date().toISOString();
@@ -75,7 +75,7 @@ export const useSeatsStore = defineStore('seats', {
           fecha,
           numeroDeReservas: asientosSeleccionados.length,
         };
-        const response = await axios.post('/api/pedido', pedido);
+        const response = await axios.post('http://a2be0c14db8ce4a91900b9e17cea92a6-1532791566.us-east-1.elb.amazonaws.com/pedido', pedido);
         if (response.data && response.data.pedidoID) {
           return response.data.pedidoID;
         } else {

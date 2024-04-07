@@ -19,7 +19,7 @@ export const useAuthStore = defineStore('auth', {
     actions: {
         async login(nombreUsuario: string, contraseña: string) {
             try {
-                const response = await axios.post('/api/Usuario/login', {
+                const response = await axios.post('http://a2be0c14db8ce4a91900b9e17cea92a6-1532791566.us-east-1.elb.amazonaws.com/Usuario/login', {
                     nombre: nombreUsuario,
                     contraseña: contraseña,
                 }, {

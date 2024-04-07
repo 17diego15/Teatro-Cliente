@@ -15,7 +15,7 @@ export const useSalasStore = defineStore('salas', {
   actions: {
     async cargarSalas() {
       try {
-        const response = await axios.get('/api/sala');
+        const response = await axios.get('http://a2be0c14db8ce4a91900b9e17cea92a6-1532791566.us-east-1.elb.amazonaws.com/sala');
         this.salas = response.data;
       } catch (error) {
         console.error('Error al cargar las salas:', error);
@@ -23,7 +23,7 @@ export const useSalasStore = defineStore('salas', {
     },
     async crearSala(nuevaSala: Sala) {
       try {
-        const response = await axios.post('/api/sala', nuevaSala);
+        const response = await axios.post('http://a2be0c14db8ce4a91900b9e17cea92a6-1532791566.us-east-1.elb.amazonaws.com/sala', nuevaSala);
         this.salas.push(response.data);
       } catch (error) {
         console.error('Error al crear la sala:', error);
@@ -32,7 +32,7 @@ export const useSalasStore = defineStore('salas', {
     },
     async actualizarSala(salaID: number, salaActualizada: Sala) {
       try {
-        await axios.put(`/api/sala/${salaID}`, salaActualizada);
+        await axios.put(`http://a2be0c14db8ce4a91900b9e17cea92a6-1532791566.us-east-1.elb.amazonaws.com/sala/${salaID}`, salaActualizada);
         const index = this.salas.findIndex(sala => sala.salaID === salaID);
         if (index !== -1) {
           this.salas[index] = salaActualizada;
@@ -44,7 +44,7 @@ export const useSalasStore = defineStore('salas', {
     },
     async eliminarSala(salaID: number) {
       try {
-        await axios.delete(`/api/sala/${salaID}`);
+        await axios.delete(`http://a2be0c14db8ce4a91900b9e17cea92a6-1532791566.us-east-1.elb.amazonaws.com/sala/${salaID}`);
         const index = this.salas.findIndex(sala => sala.salaID === salaID);
         if (index !== -1) {
           this.salas.splice(index, 1);
