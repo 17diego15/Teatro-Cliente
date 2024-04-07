@@ -880,7 +880,7 @@
   }
 
   .dashboard_put textarea{
-    width: 15rem;
+    width: 9rem;
   }
 
   .dashboard_contenido_funciones>.dashboard_item:not(:last-child)::after {
