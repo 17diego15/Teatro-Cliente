@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
+import LogoCanvas from '@/components/LogoComponente.vue'; 
 
 </script>
 
@@ -8,7 +9,7 @@ import { RouterLink } from 'vue-router'
     <div class="home_footer">
         <div class="home_footer_izq">
             <div class="home_footer_izq_div">
-                <img src="../assets/logo.png" alt="">
+                <LogoCanvas /> 
                 <div class="home_footer_izq_div_iconos">
                     <svg xmlns="http://www.w3.org/2000/svg" class="home_footer_izq_iconos"
                         viewBox="0 0 512 512">

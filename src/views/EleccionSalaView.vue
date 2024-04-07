@@ -1,12 +1,9 @@
 <script lang="ts">
-import { defineComponent, onMounted, ref, toRefs  } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-
-interface Obra {
-  obraID: number;
-  titulo: string;
-  imagen: string;
-}
+import { defineComponent, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useFuncionesStore } from '@/store/FuncionesStore';
+import ObraDetalle from '@/components/SalaObraDetalleComponente.vue';
+import FuncionDetalle from '@/components/SalaFuncionDetalleComponente.vue';
 
 interface Funcion {
   funcionID: number;
@@ -15,77 +12,71 @@ interface Funcion {
   fecha: string;
   hora: string;
   disponibilidad: string;
+  asientosDisponibles: number;
+  asientosRestantes: number;
   obra: Obra;
 }
 
-export default defineComponent({
-  name: 'DetalleObraView',
-  props: {
-    nombreUsuario: String
-  },
-  setup(props) {
+interface Obra {
+  obraID: number;
+  titulo: string;
+  imagen: string;
+}
 
-    const funciones = ref<Funcion[]>([]);
-    const obra = ref<Obra | null>(null); 
+export default defineComponent({
+  name: 'ElecionSalaView',
+  components: {
+    ObraDetalle,
+    FuncionDetalle,
+  },
+  props: {
+    nombreUsuario: String,
+  },
+  setup() {
     const route = useRoute();
     const router = useRouter();
+    const funcionesStore = useFuncionesStore();
 
-    onMounted(async () => {
-      const obraId = route.params.id;
+    const funciones = ref<Funcion[]>([]);
+    const obra = ref<Obra | null>(null);
+
+    const cargarDatos = async () => {
+      const obraId = Number(route.params.id);
       try {
-        const response = await fetch(`/api/obras/${obraId}/funcion`);
-        if (!response.ok) {
-          throw new Error('Funciones no encontradas');
-        }
-        const data: Funcion[] = await response.json();
-        funciones.value = data;
-        if (data.length > 0) {
-          obra.value = data[0].obra; 
-        }
+        await funcionesStore.cargarFuncionesPorObra(obraId);
+        funciones.value = funcionesStore.funciones;
+        obra.value = funcionesStore.obra;
       } catch (error) {
-        console.error(error);
+        console.error('Error al cargar funciones:', error);
         router.push({ name: 'notFound' });
       }
-    });
+    };
+
+    watch(() => route.params.id, cargarDatos, { immediate: true });
 
     const volver = () => {
       router.push('/cartelera');
     };
 
-    const comprar = (id: number) => {
-      //if (!props.nombreUsuario) {
-        //router.push({ name: 'login' });
-      //} else {
-        //console.log('Comprando como:', props.nombreUsuario);
-        router.push(`/sala/${id}`);
-      //}
+    const comprar = (funcionID: number) => {
+      router.push(`/sala/${funcionID}`);
     };
 
-    return { funciones, obra, volver, comprar };
-  }
+    return {
+      funciones,
+      obra,
+      volver,
+      comprar,
+    };
+  },
 });
 </script>
 
 <template>
   <section v-if="obra" class="eleccionSala_container">
-    <div class="eleccionSala_container_div" id="eleccionSala_div1">
-      <img :src="obra.imagen" alt="Imagen de la obra" v-if="obra.imagen" />
-      <div class="eleccionSala_texto" v-if="obra.titulo">
-        <h2>{{ obra.titulo }}</h2>
-        <p>Teatro ticketon, zaragoza</p>
-      </div>
-    </div>
-    <div class="eleccionSala_div2" id="eleccionSala_div2">
-      <div v-for="funcion in funciones" :key="funcion.funcionID">
-        <p>{{ funcion.fecha }}</p>
-        <p>{{ funcion.hora }}</p>
-        <p v-if="funcion.disponibilidad === 'Si'">Disponible</p>
-        <button v-if="funcion.disponibilidad === 'Si'" @click="comprar(funcion.funcionID)">Comprar</button>
-        <p v-else>No disponible</p>
-      </div>
-    </div>
+    <ObraDetalle :obra="obra" />
+    <FuncionDetalle :funciones="funciones" @comprar="comprar" />
     <button id="eleccionSala_volver" @click="volver">Volver</button>
   </section>
   <p v-else>Obra no encontrada</p>
 </template>
-

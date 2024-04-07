@@ -1,6 +1,11 @@
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router'
+import { defineComponent, onMounted, ref } from 'vue';
+import type { Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useObrasStore } from '@/store/ObrasStore';
+import ObraImagen from '@/components/ObraImagenComponente.vue';
+import ObraDetalles from '@/components/ObraDetallesComponente.vue';
+import ObraInfoAdicional from '@/components/ObraInfoAdicionalComponente.vue';
 
 interface Actor {
     nombre: string;
@@ -18,40 +23,24 @@ interface Obra {
 }
 
 export default defineComponent({
-    name: 'DetalleObraView',
+    components: { ObraImagen, ObraDetalles, ObraInfoAdicional },
     setup() {
-        const obra = ref<Obra | null>(null);
+        const obra: Ref<Obra | null> = ref(null);
         const route = useRoute();
-        const router = useRouter();
-
-        const comprarObra = (id: number) => {
-            router.push(`/compra/${id}`)
-        };
+        const router = useRouter(); 
+        const obrasStore = useObrasStore();
 
         const cargarObra = async () => {
             const id = Number(route.params.id);
-            try {
-                const respuesta = await fetch(`/api/obras/${id}`)
-                console.log(respuesta)
-
-                if (!respuesta.ok) {
-                    throw new Error(`Error al obtener la obra: ${id}`)
-                }
-                const data: Obra = await respuesta.json();
-                obra.value = data;
-                obra.value = {
-                    ...data,
-                    actores: data.actores.map((actor: any) => actor.nombre) 
-                };
-
-            } catch (error) {
-                console.error(error)
-            }
+            obra.value = await obrasStore.cargarObra(id);
         };
-        onMounted(() => {
-            cargarObra();
-        });
-        console.log(obra)
+
+        const comprarObra = (id: number) => {
+            router.push(`/compra/${id}`);
+        };
+
+        onMounted(cargarObra);
+
         return { obra, comprarObra };
     }
 });
@@ -60,33 +49,11 @@ export default defineComponent({
 <template>
     <div v-if="obra" class="infoObras_sectionContainer">
         <div class="infoObras_section_div">
-            <div class="infoObras_section_izq">
-                <img :src="obra.imagen" :alt="'Imagen de ' + obra.titulo" class="infoObras_section_izq_img">
-            </div>
-
-            <div class="infoObras_section_central">
-                <h2>{{ obra.titulo }}</h2>
-                <p><strong>Director:</strong></p>
-                <p>{{ obra.director }}</p>
-                <p><strong>Actores:</strong></p>
-                <p>{{ obra.actores.join(', ') }}</p>
-                <p><strong>Sinopsis:</strong> </p>
-                <p>{{ obra.sinopsis }}</p>
-            </div>
-
-            <div class="infoObras_section_dcha">
-                <div class="infoObras_section_dcha_div1">
-                    <p><strong>Duración:</strong></p>
-                    <p>{{ obra.duración }}</p>
-                </div>
-                <div class="infoObras_section_dcha_div2">
-                    <p><strong>Precio:</strong></p>
-                    <p>{{ obra.precio }}€</p>
-                </div>
-            </div>
-
+            <ObraImagen :imagen="obra.imagen" :titulo="obra.titulo" />
+            <ObraDetalles :titulo="obra.titulo" :director="obra.director" :actores="obra.actores.map(a => a.nombre)"
+                :sinopsis="obra.sinopsis" />
+            <ObraInfoAdicional :duracion="obra.duración" :precio="obra.precio" />
         </div>
-
         <div class="infoObras_section_boton">
             <button @click="comprarObra(obra.obraID)">Comprar</button>
         </div>
