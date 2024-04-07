@@ -869,6 +869,20 @@
     display: none;
   }
 
+  .dashboard_boton {
+    width: 8rem;
+    align-items: center;
+  }
+
+  .dashboard_put_actores{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .dashboard_put textarea{
+    width: 15rem;
+  }
+
   .dashboard_contenido_funciones>.dashboard_item:not(:last-child)::after {
     content: "";
     display: block;
@@ -877,6 +891,7 @@
     background: var(--bordeTarjetaSala);
     margin: 10px 15px;
   }
+
   .dashboard_contenido_obras>.dashboard_item:not(:last-child)::after {
     content: "";
     display: block;
@@ -903,7 +918,6 @@
     background: var(--bordeTarjetaSala);
     margin: 10px 15px;
   }
-
 }
 
 /*register*/
