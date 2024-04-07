@@ -847,13 +847,71 @@
   border: none;
 }
 
+@media (max-width: 768px) {
+  .dashboard_menu_izquierda {
+    width: 100%;
+    height: auto;
+  }
+
+  .dashboard_menu_derecha {
+    width: 100%;
+    padding: 1rem;
+  }
+
+  .dashboard_contenido_funciones,
+  .dashboard_contenido_obras,
+  .dashboard_contenido_usuarios,
+  .dashboard_contenido_actores {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard_encabezado {
+    display: none;
+  }
+
+  .dashboard_contenido_funciones>.dashboard_item:not(:last-child)::after {
+    content: "";
+    display: block;
+    height: 1px;
+    width: calc(100% - 30px);
+    background: var(--bordeTarjetaSala);
+    margin: 10px 15px;
+  }
+  .dashboard_contenido_obras>.dashboard_item:not(:last-child)::after {
+    content: "";
+    display: block;
+    height: 1px;
+    width: calc(100% - 30px);
+    background: var(--bordeTarjetaSala);
+    margin: 10px 15px;
+  }
+
+  .dashboard_contenido_usuarios>.dashboard_item:not(:last-child)::after {
+    content: "";
+    display: block;
+    height: 1px;
+    width: calc(100% - 30px);
+    background: var(--bordeTarjetaSala);
+    margin: 10px 15px;
+  }
+
+  .dashboard_contenido_actores>.dashboard_item:not(:last-child)::after {
+    content: "";
+    display: block;
+    height: 1px;
+    width: calc(100% - 30px);
+    background: var(--bordeTarjetaSala);
+    margin: 10px 15px;
+  }
+
+}
+
 /*register*/
 
 .register_container {
   min-height: 100vh;
   justify-content: center;
   display: flex;
-  flex-direction: column;
   background-color: var(--fondo);
   color: var(--blanco);
   align-items: center;
@@ -1167,16 +1225,17 @@
     height: 5rem;
   }
 
-  .sala_leyenda{
+  .sala_leyenda {
     flex-direction: column;
     gap: 2rem;
   }
-  .sala_leyenda div{
+
+  .sala_leyenda div {
     padding-left: 30%;
     justify-content: start;
   }
 
-  .sala_boton{
+  .sala_boton {
     width: 10rem;
   }
 }
